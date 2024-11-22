@@ -1,6 +1,9 @@
 <?php
 require_once 'includes/config_session.inc.php';
+
 require_once 'includes/signup_view.inc.php';
+
+require_once 'includes/login_view.inc.php';
 ?>
 
 <!DOCTYPE html>
@@ -201,6 +204,9 @@ require_once 'includes/signup_view.inc.php';
             </form>
             <button class="secondary-button" onclick="toggleForms()">Create Account</button>
         </div>
+        <?php
+        check_login_errors();
+        ?>
 
         <div class="form-container" id="signup-form">
             <div class="form-header">

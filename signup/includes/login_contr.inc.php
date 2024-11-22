@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
+require_once 'signup_controller.inc.php';
 
-
-if (is_empty_input($username, $pwd)) {
+if (is_empty_input($Email, $pwd)) {
 
     if (empty($username) || empty($pwd)) {
         return true;
@@ -11,7 +11,7 @@ if (is_empty_input($username, $pwd)) {
     }
 }
 
-function is_username_wrong(bool|array $result)
+function is_email_wrong(bool|array $result)
 {
     if (!$result) {
         return true;
@@ -20,9 +20,27 @@ function is_username_wrong(bool|array $result)
     }
 }
 
-function is_password_wrong(string $pwd, string $hashedpwd)
+function is_doctor(bool|array $result)
 {
-    if (!password_verify($pwd, $hashedpwd)) {
+    if (!$result) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function is_patient(bool|array $result)
+{
+    if (!$result) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function is_password_wrong(string $pwd, string $resultpwd)
+{
+    if (!$pwd == $resultpwd) {
         return true;
     } else {
         return false;
