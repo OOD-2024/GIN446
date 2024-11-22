@@ -40,35 +40,6 @@ nav {
   cursor: pointer;
 }
 
-.hero {
-  display: flex;
-  padding: 2rem 4rem;
-  align-items: center;
-  gap: 2rem;
-  min-height: 70vh;
-}
-
-.hero-content {
-  flex: 1;
-}
-
-.hero-title {
-  font-size: 5rem;
-  color: #ff6b6b;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-}
-
-.hero-subtitle {
-  font-size: 1.2rem;
-  color: #333;
-}
-
-.illustration {
-  flex: 1;
-  text-align: center;
-}
-
 footer {
   background-color: #333;
   color: #fff;
