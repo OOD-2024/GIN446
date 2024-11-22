@@ -2,10 +2,11 @@
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $username = $_POST["username"];
-    $pwd = $_POST["pwd"];
-    $email = strtolower($_POST["email"]);
+    $Email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
 
+    $pwd = $_POST["pwd"];
+
+    $email = strtolower($_POST["email"]);
     try {
         require_once "dbh.inc.php";
         require_once "login_model.inc.php";
@@ -16,31 +17,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $errors = [];
 
-        if (is_empty_input($username, $pwd)) {
+        if (is_empty_input($Email, $pwd)) {
             $errors["empty_inputs"] = "Fill in all fields";
         }
-        $result = get_user($pdo, $username);
-        if (is_username_wrong($result)) {
-            $errors["login_incorrect"] = "Incorrect Login info!";
-        }
-        if (!is_username_wrong($result) && is_password_wrong($pwd, $result["pwd"])) {
-            $errors["login_incorrect"] = "Incorrect Login info!";
+        $result = get_doctor($pdo, $Email);
+        if (is_doctor($result)) {
+            if (!is_password_wrong($pwd, $result["pwd"])) {
+                //go to doctor page
+                $errors["login_correct"] = "Login Successfull!";
+
+            } else {
+                $errors["login_incorrect"] = "Incorrect Login info";
+            }
+        } else {
+            $result = get_patient($pdo, $Email);
+            if (is_patient($result)) {
+                if (!is_password_wrong($pwd, $result["pwd"])) {
+                    //got to patient page
+                    $errors["login_correct"] = "Login Successfull";
+
+                }
+            }
+
+            if (!is_email_wrong($result) && is_password_wrong($pwd, $result["pwd"])) {
+                $errors["login_incorrect"] = "Incorrect Login info!";
+            }
         }
 
         require 'config_session.inc.php';
 
         if ($errors) {
-            $_SESSION["errors_signup"] = $errors;
+            $_SESSION["errors_login"] = $errors;
 
             header('Location: ../index.php');
             die();
         }
         $newSessionId = session_create_id();
-        $sessionId = $newSessionId . '_' . $result['id'];
-        $session_id($sessionId);
-
+        $sessionId = $newSessionId . '_' . $result['ID'];
+        $_SESSION['user_id'] = $sessionId;
+        setsessionid($pdo, $Email);
         $_SESSION['user_id'] = $result["id"];
-        $_SESSION["user_username"] = htmlspecialchars($result["username"]);
+        $_SESSION["user_Name"] = htmlspecialchars($result["First_Name" . " " . "Last_Name"]);
 
         $_SESSION["last_regeneration"] = time();
         header("Location:../index.php?login=success");

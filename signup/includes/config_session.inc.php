@@ -12,33 +12,45 @@ session_set_cookie_params([
 ]);
 
 session_start();
+
+
 if (isset($_SESSION["user_id"])) {
-    regenerate_session_id_loggedin();
+    if (!isset($_SESSION["last_regeneration"])) {
+        regenerate_session_id_loggedin();
+    } else {
+        $interval = 60 * 30;
+        if (time() - $_SESSION["last_regeneration" >= $interval]) {
+
+            regenerate_session_id_loggedin();
+        }
+    }
 } else {
+
     if (!isset($_SESSION["last_regeneration"])) {
         regenerateSessionId();
     } else {
-        regenerateSessionId();
+        $interval = 60 * 30;
+        if (time() - $_SESSION["last_regeneration"] >= $interval) {
+
+            regenerateSessionId();
+        }
     }
 
 }
 
 function regenerateSessionId()
 {
-    session_regenerate_id();
+    session_regenerate_id(true);
     $_SESSION["last_regeneration"] = time();
 }
 
 function regenerate_session_id_loggedin()
 {
     session_regenerate_id(true);
+
     $userID = $_SESSION["user_id"];
     $newSessionId = session_create_id();
-    $sessionId = $newSessionId . '_' . $userID['id'];
-
-
-    $_SESSION["last_regeneration"] = time();
-
-
-    $_SESSION["last_regeneration"] = time();
+    $sessionId = $newSessionId . '_' . $userID;
+    // $session_Id($sessionId);
+    $_SESSION['user_id'] = $newSessionId;
 }
