@@ -1,49 +1,48 @@
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const events = [
-  {
-    name: "ECO350",
-    days: [1, 5],
-    startTime: "09:30",
-    endTime: "10:45",
-    location: "",
-  },
-  {
-    name: "GEL313",
-    days: [2, 4],
-    startTime: "09:30",
-    endTime: "10:45",
-    location: "",
-  },
-  {
-    name: "GEN350",
-    days: [1, 5],
-    startTime: "11:00",
-    endTime: "12:15",
-    location: "",
-  },
-  {
-    name: "GIN321",
-    days: [2, 4],
-    startTime: "15:30",
-    endTime: "16:45",
-    location: "",
-  },
-  {
-    name: "GIN446",
-    days: [2, 4],
-    startTime: "17:00",
-    endTime: "18:15",
-    location: "",
-  },
-  {
-    name: "GEL445",
-    days: [5],
-    startTime: "12:30",
-    endTime: "15:15",
-    location: "",
-  },
-];
+// const events = [
+//   {
+//     name: "ECO350",
+//     days: [1, 5],
+//     startTime: "09:30",
+//     endTime: "10:45",
+//     location: "",
+//   },
+//   {
+//     name: "GEL313",
+//     days: [2, 4],
+//     startTime: "09:30",
+//     endTime: "10:45",
+//     location: "",
+//   },
+//   {
+//     name: "GEN350",
+//     days: [1, 5],
+//     startTime: "11:00",
+//     endTime: "12:15",
+//     location: "",
+//   },
+//   {
+//     name: "GIN321",
+//     days: [2, 4],
+//     startTime: "15:30",
+//     endTime: "16:45",
+//     location: "",
+//   },
+//   {
+//     name: "GIN446",
+//     days: [2, 4],
+//     startTime: "17:00",
+//     endTime: "18:15",
+//     location: "",
+//   },
+//   {
+//     name: "GEL445",
+//     days: [5],
+//     startTime: "12:30",
+//     endTime: "15:15",
+//     location: "",
+//   },
+// ];
 
 function setCurrentMonth() {
   const months = [
@@ -191,19 +190,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   setActiveDay();
   const currentMinutes = showCurrentTime();
   scrollToCurrentTime(currentMinutes);
-
-  // document
-  //   .getElementById("theme-toggle")
-  //   .addEventListener("click", toggleTheme);
-  //   document
-  //     .getElementById("add-event-btn")
-  //     .addEventListener("click", showAddEventForm);
 });
 
-function showAddEventForm() {
-  let form = document.getElementById("add-event-form");
-  form.style.display = "block";
-}
+// function showAddEventForm() {
+//   let form = document.getElementById("add-event-form");
+//   form.style.display = "block";
+// }
 
 // document
 //   .getElementById("cancel-add-event")

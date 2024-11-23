@@ -16,7 +16,7 @@
         <div class="logo">Clinic.io</div>
         <div class="nav-links">
             <a href="#">Home</a>
-            <a href="/appointment.php">Services</a>
+            <a href="/search.php">Services</a>
             <a href="/about.php">About</a>
         </div>
         <button class="register-btn">Register</button>
