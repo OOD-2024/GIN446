@@ -14,29 +14,17 @@ session_set_cookie_params([
 session_start();
 
 
-if (isset($_SESSION["user_id"])) {
-    if (!isset($_SESSION["last_regeneration"])) {
-        regenerate_session_id_loggedin();
-    } else {
-        $interval = 60 * 30;
-        if (time() - $_SESSION["last_regeneration" >= $interval]) {
 
-            regenerate_session_id_loggedin();
-        }
-    }
+if (!isset($_SESSION["last_regeneration"])) {
+    regenerateSessionId();
 } else {
+    $interval = 60 * 30;
+    if (time() - $_SESSION["last_regeneration"] >= $interval) {
 
-    if (!isset($_SESSION["last_regeneration"])) {
         regenerateSessionId();
-    } else {
-        $interval = 60 * 30;
-        if (time() - $_SESSION["last_regeneration"] >= $interval) {
-
-            regenerateSessionId();
-        }
     }
-
 }
+
 
 function regenerateSessionId()
 {
@@ -44,13 +32,14 @@ function regenerateSessionId()
     $_SESSION["last_regeneration"] = time();
 }
 
-function regenerate_session_id_loggedin()
+function regenerate_session_id_loggedin(object $pdo, $email)
 {
     session_regenerate_id(true);
-
-    $userID = $_SESSION["user_id"];
-    $newSessionId = session_create_id();
-    $sessionId = $newSessionId . '_' . $userID;
-    // $session_Id($sessionId);
-    $_SESSION['user_id'] = $newSessionId;
+    $query = 'Select * from patient where Email = :email';
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $sessionId = $result["ID"];
+    $_SESSION["user_id"] = $sessionId;
 }

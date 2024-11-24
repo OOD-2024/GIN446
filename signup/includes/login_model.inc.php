@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require_once 'config_session.inc.php';
-
 
 function get_doctor(object $pdo, string $email)
 {
@@ -25,10 +23,11 @@ function get_patient(object $pdo, string $email)
     return $result;
 }
 
-function setsessionid($pdo, $email)
+function setsessionid($pdo, $email, $sessionId)
 {
     $query = "update patient set session_id = :sessionid , updated_at = :date where Email= $email";
     $stmt = @$pdo->prepare($query);
-    $stmt->bindParam(":sessionid", $_SESSION['user_id']);
+    $stmt->bindParam(":sessionid", $sessionId);
     $stmt->bindParam(':date', date('Y-m-d H:i:s'));
+
 }
