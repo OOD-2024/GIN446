@@ -50,9 +50,9 @@ function h($str)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/layout.css">
-    <link rel="stylesheet" href="/css/search.css">
-    <link rel="shortcut icon" href="/public/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
     <title>Find a Doctor - Clinic.io</title>
 
 </head>
@@ -61,9 +61,9 @@ function h($str)
     <nav>
         <div class="logo">Clinic.io</div>
         <div class="nav-links">
-            <a href="/">Home</a>
+            <a href="index.php">Home</a>
             <a href="#">Services</a>
-            <a href="/about.php">About</a>
+            <a href="about.php">About</a>
         </div>
         <button class="register-btn">Register</button>
     </nav>

@@ -38,7 +38,9 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($doctor) ? "Appointments - Dr. " . h($doctor['First_Name']) . " " . h($doctor['Last_Name']) : "Appointments" ?></title>
+    <title>
+        <?= isset($doctor) ? "Appointments - Dr. " . h($doctor['First_Name']) . " " . h($doctor['Last_Name']) : "Appointments" ?>
+    </title>
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="/css/schedule.css">
     <link rel="stylesheet" href="/css/appointment.css">
@@ -63,7 +65,7 @@ try {
         </div>
     <?php else: ?>
         <div class="doctor-info">
-            <h2>Dr. <?= h($doctor['First_Name']) ?> <?= h($doctor['Last_Name']) ?></h2>
+            <h2>Dr. <?= h($doctor['First_Name']) ?>     <?= h($doctor['Last_Name']) ?></h2>
             <p>Specialties: <?= h($doctor['specialties']) ?></p>
         </div>
 

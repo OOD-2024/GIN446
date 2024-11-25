@@ -12,11 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         require_once "login_model.inc.php";
         require_once "login_contr.inc.php";
         require_once "login_view.inc.php";
-
+        $db = Database::getInstance();
+        $pdo = $db->getConnection();
         // ERRORS HANDLERS
         $errors = [];
 
-        if (is_empty_input($Email, $pwd)) {
+        if (is_empty_inputL($Email, $pwd)) {
             $errors["empty_inputs"] = "Fill in all fields";
         }
         $result = get_doctor($pdo, $Email);

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once 'signup_controller.inc.php';
 
-function is_empty_input($Email, $pwd)
+function is_empty_inputL($Email, $pwd)
 {
 
     if (empty($Email) || empty($pwd)) {
