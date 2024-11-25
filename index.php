@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/public/favicon.png" type="image/x-icon">
@@ -16,10 +18,10 @@
         <div class="logo">Clinic.io</div>
         <div class="nav-links">
             <a href="#">Home</a>
-            <a href="/search.php">Services</a>
-            <a href="/about.php">About</a>
+            <a href="search.php">Services</a>
+            <a href="about.php">About</a>
         </div>
-        <button class="register-btn">Register</button>
+        <a href="signin_up"><button id="register" class="register-btn">Register</button></a>
     </nav>
 
     <div class="hero">
@@ -34,6 +36,11 @@
     <footer>
         &copy; 2024 clinic.io. All rights reserved.
     </footer>
+
+
+
+
 </body>
+
 
 </html>

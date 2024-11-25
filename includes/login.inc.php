@@ -12,11 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         require_once "login_model.inc.php";
         require_once "login_contr.inc.php";
         require_once "login_view.inc.php";
-
+        $db = Database::getInstance();
+        $pdo = $db->getConnection();
         // ERRORS HANDLERS
         $errors = [];
 
-        if (is_empty_input($Email, $pwd)) {
+        if (is_empty_inputL($Email, $pwd)) {
             $errors["empty_inputs"] = "Fill in all fields";
         }
         $result = get_doctor($pdo, $Email);
@@ -25,8 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 //go to doctor page
                 $errors["login_correct"] = "Login Successfull!";
 
-            } else {
-                $errors["login_incorrect"] = "Incorrect Login info";
             }
         } else {
             $result = get_patient($pdo, $Email);
@@ -44,6 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         require 'config_session.inc.php';
+        regenerate_session_id_loggedin($pdo, $Email);
+        $user_session_id = session_id();
+        setsessionid($pdo, $Email, $user_session_id);
+        $_SESSION['user_session_id'] = $user_session_id;
 
         if ($errors) {
             $_SESSION["errors_login"] = $errors;
@@ -51,14 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header('Location: ../index.php');
             die();
         }
-        $newSessionId = session_create_id();
-        $sessionId = $newSessionId . '_' . $result['ID'];
-        $_SESSION['user_id'] = $sessionId;
-        setsessionid($pdo, $Email);
-        $_SESSION['user_id'] = $result["id"];
-        $_SESSION["user_Name"] = htmlspecialchars($result["First_Name" . " " . "Last_Name"]);
 
-        $_SESSION["last_regeneration"] = time();
+
         header("Location:../index.php?login=success");
         $pdo = null;
         $statement = null;
