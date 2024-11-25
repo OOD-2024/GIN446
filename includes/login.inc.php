@@ -14,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         require_once "login_view.inc.php";
 
         // ERRORS HANDLERS
-
         $errors = [];
 
         if (is_empty_input($Email, $pwd)) {

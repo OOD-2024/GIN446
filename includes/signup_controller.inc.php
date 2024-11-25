@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 
-function is_empty_input($email, $pwd, ): bool
+function is_empty_input($Fname, $pwd, $email): bool
 {
-    if (empty($pwd) || empty($email)) {
+    if (empty($pwd) || empty($email) || empty($Fname)) {
         return true;
     }
     return false;
