@@ -20,11 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (is_empty_inputL($Email, $pwd)) {
             $errors["empty_inputs"] = "Fill in all fields";
         }
+        require 'config_session.inc.php';
         $result = get_doctor($pdo, $Email);
         if (is_doctor($result)) {
             if (!is_password_wrong($pwd, $result["pwd"])) {
                 //go to doctor page
+                $_SESSION["Doctor_ID"] = "Doctor" . "_" . $result['ID'];
                 $errors["login_correct"] = "Login Successfull!";
+
 
             }
         } else {
@@ -32,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (is_patient($result)) {
                 if (!is_password_wrong($pwd, $result["pwd"])) {
                     //got to patient page
+                    $_SESSION["Patient_ID"] = "Patient" . "_" . $result["ID"];
                     $errors["login_correct"] = "Login Successfull";
 
                 }
@@ -42,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
 
-        require 'config_session.inc.php';
+
         regenerate_session_id_loggedin($pdo, $Email);
         $user_session_id = session_id();
         setsessionid($pdo, $Email, $user_session_id);

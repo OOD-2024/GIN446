@@ -183,6 +183,7 @@ require_once 'includes/login_view.inc.php';
             }
         }
     </style>
+
 </head>
 
 <body>

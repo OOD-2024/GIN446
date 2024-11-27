@@ -9,7 +9,7 @@ function getPatient_from_id($pdo, $patient_id)
     $stmt->bindParam(":id", $patient_id);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return  $result;
+    return $result;
 }
 function getAppointments($pdo, $patient_id)
 {
@@ -47,4 +47,19 @@ function getAppointments($pdo, $patient_id)
         error_log("Database error in getAppointments: " . $e->getMessage());
         return [];
     }
+
+}
+function get_medical_records($pdo, $patient_id)
+{
+    $query = "Select diagnosis from medical_record  where patient_id = :ID";
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':ID', $patient_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Database error in get_medical_records: " . $e->getMessage());
+        return [];
+    }
+
 }
