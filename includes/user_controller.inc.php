@@ -25,6 +25,7 @@ function getAppointmentEvents($pdo, $id)
         throw new RuntimeException("Failed to process appointment events");
     }
 }
+
 function formatTime($time)
 {
     return date('H:i', strtotime($time));
@@ -33,4 +34,20 @@ function formatTime($time)
 function getDayOfWeek($date)
 {
     return date('w', strtotime($date));
+}
+function getrecords($pdo, $id)
+{
+    $records = get_medical_records($pdo, $id);
+    return $records;
+    // if (empty($records)) {
+    //     return [];
+    // } else {
+    //     $rec = [];
+    //     foreach ($records as $r) {
+    //         $rec[] = [
+    //             'diagnosis' => $r['diagnosis']
+    //         ];
+    //     }
+    //     return $rec;
+    // }
 }

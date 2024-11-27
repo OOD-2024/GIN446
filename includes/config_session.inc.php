@@ -16,7 +16,9 @@ session_start();
 
 
 if (!isset($_SESSION["last_regeneration"])) {
+    $_SESSION["guest_id"] = session_create_id();
     regenerateSessionId();
+
 } else {
     $interval = 60 * 30;
     if (time() - $_SESSION["last_regeneration"] >= $interval) {
@@ -41,5 +43,5 @@ function regenerate_session_id_loggedin(object $pdo, $email)
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $sessionId = $result["ID"];
-    $_SESSION["user_id"] = $sessionId;
+    $_SESSION["login_user_id"] = $sessionId;
 }
