@@ -11,12 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $BloodType = $_POST["BloodType"];
 
     try {
-        require_once 'dbh.inc.php';
 
         require_once 'signup_model.inc.php';
         require_once 'signup_controller.inc.php';
         require_once 'signup_view.inc.php';
-
+        $db = Database::getInstance();
+        $pdo = $db->getConnection();
         // ERRORS HANDLERS
 
         $errors = [];
@@ -37,12 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($errors) {
             $_SESSION["errors_signup"] = $errors;
             echo "Eroor";
-            header('Location: ../index.php');
+            header('Location: ../signin_up.php');
             die();
         }
 
         create_user($pdo, $Fname, $Lname, $Email, $pwd, $phonenum, $DOB, $gender, $BloodType);
-        header('Location: ../index.php');
+        header('Location: ../signin_up.php');
     } catch (PDOException $e) {
         die("Query has failed: " . $e->getMessage());
     }
