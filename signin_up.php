@@ -144,7 +144,7 @@ require_once 'includes/login_view.inc.php';
         .select-box {
             position: relative;
 
-            width: 26rem;
+            width: 100%;
         }
 
         .select-box input {
