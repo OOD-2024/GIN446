@@ -22,7 +22,8 @@ require_once 'includes/login_view.inc.php';
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            /*background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);*/
+            background-color: #ffe8e6;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -50,7 +51,7 @@ require_once 'includes/login_view.inc.php';
         }
 
         .form-header h1 {
-            color: #1a73e8;
+            color: #ff6b6b;
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
@@ -91,7 +92,7 @@ require_once 'includes/login_view.inc.php';
         button {
             width: 100%;
             padding: 0.9rem;
-            background: #1a73e8;
+            background: #ff6b6b;
             color: white;
             border: none;
             border-radius: 6px;
@@ -101,7 +102,7 @@ require_once 'includes/login_view.inc.php';
         }
 
         button:hover {
-            background: #1557b0;
+            background: #ff6b3b;
         }
 
         button:active {
@@ -110,8 +111,8 @@ require_once 'includes/login_view.inc.php';
 
         .secondary-button {
             background: transparent;
-            color: #1a73e8;
-            border: 1.5px solid #1a73e8;
+            color: #ff6b6b;
+            border: 1.5px solid #ff6b6b;
             margin-top: 1rem;
         }
 
