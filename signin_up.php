@@ -22,7 +22,6 @@ require_once 'includes/login_view.inc.php';
         }
 
         body {
-            /*background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);*/
             background-color: #ffe8e6;
             min-height: 100vh;
             display: flex;
@@ -30,14 +29,9 @@ require_once 'includes/login_view.inc.php';
             align-items: center;
             padding: 2rem;
         }
-
-        .container {
+        .form-container {
             width: 100%;
             max-width: 400px;
-            position: relative;
-        }
-
-        .form-container {
             background: white;
             padding: 2rem;
             border-radius: 12px;
@@ -122,8 +116,8 @@ require_once 'includes/login_view.inc.php';
 
         #signup-form {
             position: absolute;
-            top: 0;
-            left: 0;
+            top:2rem;
+            left:auto;
             width: 100%;
             opacity: 0;
             pointer-events: none;
@@ -315,94 +309,92 @@ require_once 'includes/login_view.inc.php';
 </head>
 
 <body>
-    <div class="container">
-        <div class="form-container" id="login-form">
-            <div class="form-header">
-                <h1>Welcome Back</h1>
-            </div>
-            <form action="includes/login.inc.php" method="post">
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Email" required>
-                    <div class="error-message">Please enter a valid email address</div>
-                </div>
-                <div class="form-group">
-                    <input type="password" name="pwd" placeholder="Password" required>
-                    <div class="error-message">Password is required</div>
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <button class="secondary-button" onclick="toggleForms()">Create Account</button>
+    <div class="form-container" id="login-form">
+        <div class="form-header">
+            <h1>Welcome Back</h1>
         </div>
-        <?php
-        check_login_errors();
-        ?>
-
-        <div class="form-container" id="signup-form">
-            <div class="form-header">
-                <h1>Create Account</h1>
+        <form action="includes/login.inc.php" method="post">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+                <div class="error-message">Please enter a valid email address</div>
             </div>
-            <form action="includes/signup.inc.php" method="post">
-                <div class="form-row">
-                    <div class="form-group">
-                        <input type="text" name="Fname" placeholder="First Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="Lname" placeholder="Last Name" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" name="pwd" placeholder="Password" required>
-                </div>
-                <div class="form-group">
-                    <!-- <input type="tel" name="phone" placeholder="Phone Number" required> -->
-                    <div class="select-box">
-                        <div class="selected-option">
-                            <div>
-                                <span class="iconify" data-icon="flag:gb-4x3"></span>
-                                <strong>+44</strong>
-                            </div>
-                            <input type="tel" name="phone" placeholder="Phone Number">
-                        </div>
-                        <div class="options">
-                            <input type="text" class="search-box" placeholder="Search Country Name">
-                            <ol>
+            <div class="form-group">
+                <input type="password" name="pwd" placeholder="Password" required>
+                <div class="error-message">Password is required</div>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <button class="secondary-button" onclick="toggleForms()">Create Account</button>
+    </div>
+    <?php
+    check_login_errors();
+    ?>
 
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Date of Birth</label>
-                    <input type="date" name="DOB" required>
-                </div>
-                <div class="form-group">
-                    <select name="gender" required>
-                        <option value="" disabled selected>Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select name="BloodType" required>
-                        <option value="" disabled selected>Select BloodType</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                    </select>
-                </div>
-
-                <button type="submit">Sign Up</button>
-            </form>
-            <button class="secondary-button" onclick="toggleForms()">Back to Login</button>
+    <div class="form-container" id="signup-form">
+        <div class="form-header">
+            <h1>Create Account</h1>
         </div>
+        <form action="includes/signup.inc.php" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" name="Fname" placeholder="First Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="Lname" placeholder="Last Name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="pwd" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <!-- <input type="tel" name="phone" placeholder="Phone Number" required> -->
+                <div class="select-box">
+                    <div class="selected-option">
+                        <div>
+                            <span class="iconify" data-icon="flag:gb-4x3"></span>
+                            <strong>+44</strong>
+                        </div>
+                        <input type="tel" name="phone" placeholder="Phone Number">
+                    </div>
+                    <div class="options">
+                        <input type="text" class="search-box" placeholder="Search Country Name">
+                        <ol>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" name="DOB" required>
+            </div>
+            <div class="form-group">
+                <select name="gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="BloodType" required>
+                    <option value="" disabled selected>Select BloodType</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <button class="secondary-button" onclick="toggleForms()">Back to Login</button>
     </div>
 
     <script>
