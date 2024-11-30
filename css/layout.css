@@ -5,6 +5,7 @@ body {
 }
 
 nav {
+  font-family: 'Margarine', cursive;
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
@@ -31,6 +32,7 @@ nav {
 }
 
 .register-btn {
+  font-family: 'Margarine', cursive;
   background-color: #ff9999;
   padding: 0.5rem 1.5rem;
   border-radius: 20px;
@@ -41,7 +43,8 @@ nav {
 }
 
 footer {
-  background-color: #333;
+  font-family: 'Margarine', cursive;
+  background-color: #fd6767;
   color: #fff;
   padding: 1rem 2rem;
   text-align: center;
