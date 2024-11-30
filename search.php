@@ -65,13 +65,7 @@ function h($str)
             <a href="#">Services</a>
             <a href="about.php">About</a>
         </div>
-        <?php
-            if (!isset($_SESSION['user_session_id']))
-                echo '<a href="signin_up"><button class="register-btn">Register</button></a>';
-            else
-                echo '<a href="user.php"><button class="register-btn">Profile</button></a>
-                     <a href="logout.php"><button class="register-btn">Logout</button></a>';
-            ?>
+        <button class="register-btn">Register</button>
     </nav>
 
     <main>

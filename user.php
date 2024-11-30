@@ -37,7 +37,7 @@ require_once 'includes/user_controller.inc.php';
 $events = getAppointmentEvents($pdo, $userId);
 $eventsJson = json_encode($events);
 $records = getrecords($pdo, $userId);
-$recordsJson = json_encode($records);
+
 print_r($_SESSION)
     ?>
 
@@ -55,8 +55,12 @@ print_r($_SESSION)
         .diagnosis-list {
             width: 100%;
             max-width: 600px;
-            margin: 20px auto;
+            padding-left: 22%;
             font-family: Arial, sans-serif;
+            height: 340px;
+            overflow: auto;
+
+
         }
 
         .diagnosis-item {
@@ -131,17 +135,24 @@ print_r($_SESSION)
                 </div>
             </div>
         </div>
-        <div class='diagnosis-list'>
-            <h2>Diagnosis List</h2>
-            <?php
+        <?php
+        if ($records) {
+            echo '<div class="diagnosis-list">
+            <h2>Diagnosis List</h2>';
 
             foreach ($records as $rec) {
 
                 echo '<div class="diagnosis-item"> 
-                <div class ="diagnosis-title " >' . $rec['diagnosis'] . '</div> </div>';
+                <div class ="diagnosis-title " >Diagnosis: ' . $rec['Diagnosis'] . '</div>
+                <div class ="diagnosis-title " >DiagnosisDate: ' . $rec['DiagnosisDate'] . '</div>
+                <div class ="diagnosis-title " >Treatment: ' . $rec['Treatment'] . '</div>
+                <div class ="diagnosis-title " >Notes: ' . $rec['Notes'] . '</div></div>';
 
             }
-            ?>
+            echo '</div>';
+
+        }
+        ?>
         </div>
         <div class="calendar-wrapper">
 

@@ -3,10 +3,18 @@
     <?php
     require_once 'includes/config_session.inc.php';
     print_r($_SESSION);
-    if ($_GET['success'] == 'true') {
-        echo 'alert("Request was sent successfully.")';
+    if (isset($_SESSION['success'])) {
+        echo '  <script>alert("Request was sent successfully.")</script>';
+        unset($_SESSION['success']);
     }
+
+    if (isset($_SESSION['applied'])) {
+        echo '<script>alert("Request was already made and is pending approval ") </script>';
+        unset($_SESSION['applied']);
+    }
+
     ?>
+
 
 
     <head>
@@ -120,10 +128,16 @@
             <?php
             if (!isset($_SESSION['user_session_id']))
                 echo '<a href="signin_up"><button class="register-btn">Register</button></a>';
-            else
+            else {
                 echo '<a href="user.php"><button class="register-btn">Profile</button></a>
                      <a href="logout.php"><button class="register-btn">Logout</button></a>';
+            }
+            if (isset($_SESSION['Patient_ID'])) {
+                echo '<a href="career.php">Careers</a>';
+            }
+
             ?>
+
 
 
         </nav>

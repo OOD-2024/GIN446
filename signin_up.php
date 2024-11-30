@@ -29,6 +29,7 @@ require_once 'includes/login_view.inc.php';
             align-items: center;
             padding: 2rem;
         }
+
         .form-container {
             width: 100%;
             max-width: 400px;
@@ -116,8 +117,8 @@ require_once 'includes/login_view.inc.php';
 
         #signup-form {
             position: absolute;
-            top:2rem;
-            left:auto;
+            top: 2rem;
+            left: auto;
             width: 100%;
             opacity: 0;
             pointer-events: none;
@@ -260,11 +261,12 @@ require_once 'includes/login_view.inc.php';
         .select-box ol li .country-name {
             margin-left: .4rem;
         }
+
         a {
             text-decoration: none;
             color: #ff6b6b;
         }
-    
+
         @keyframes shake {
 
             0%,
@@ -284,6 +286,10 @@ require_once 'includes/login_view.inc.php';
         .error {
             border-color: #dc3545;
             animation: shake 0.2s ease-in-out;
+            top: 0;
+            display: flex;
+            justify-content: center;
+
         }
 
         .error-message {
@@ -331,10 +337,13 @@ require_once 'includes/login_view.inc.php';
         <button class="secondary-button" onclick="toggleForms()">Create Account</button>
         <button class="secondary-button"><a href="index.php">Stay as Guest</a></button>
     </div>
-    <?php
-    check_login_errors();
-    ?>
 
+    <div class="error">
+        <?php
+        check_login_errors();
+        ?>
+
+    </div>
     <div class="form-container" id="signup-form">
         <div class="form-header">
             <h1>Create Account</h1>
@@ -353,6 +362,9 @@ require_once 'includes/login_view.inc.php';
             </div>
             <div class="form-group">
                 <input type="password" name="pwd" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="verifypwd" placeholder="Verify Password" required>
             </div>
             <div class="form-group">
                 <!-- <input type="tel" name="phone" placeholder="Phone Number" required> -->

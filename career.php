@@ -13,12 +13,25 @@ try {
     $stmt->execute();
     $specialties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+    $stmt = $pdo->prepare("Select * from requests where patient_id = :pid");
+    $stmt->bindParam(":pid", $_SESSION['login_user_id']);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!isset($_SESSION['Patient_ID'])) {
+        header('Location:404.php');
+    } else {
+        if ($result) {
+            $_SESSION['applied'] = 'true';
+            header('Location:index.php');
+
+        }
+    }
+
+
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-    exit;
-}
-if (!isset($_SESSION['Patient_ID'])) {
-    header('Location:404.php');
+
 }
 ?>
 

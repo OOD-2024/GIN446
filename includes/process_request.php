@@ -24,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bindParam(':experience', $eperience);
 
         $stmt->execute();
-
-        header("Location:../index.php?success=true");
+        $_SESSION['success'] = 'true';
+        header("Location:../index.php");
 
 
 

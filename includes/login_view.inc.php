@@ -9,8 +9,10 @@ function check_login_errors()
         echo '<br>';
 
         foreach ($errors as $err) {
-            echo "<div class='error'><p> . $err . </p></div>";
+            echo
+                " <div class = 'error-message visible'><p> . $err . </p></div>";
         }
+
         unset($_SESSION["errors_login"]);
     } elseif (isset($_GET["login"]) && $_GET["login"] === "success") {
 

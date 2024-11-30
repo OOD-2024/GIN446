@@ -78,10 +78,12 @@ require_once 'includes/dbh.inc.php';
         $db = Database::getInstance();
         $pdo = $db->getConnection();
 
-        $stmt = $pdo->prepare('select * from requests join specialties where speciality = Speciality_id;');
+        $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id;');
         $stmt->execute();
         $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        if (!$requests) {
+            echo '<h1> No pending Requests</h1>';
+        }
 
         foreach ($requests as $request) {
             $statusClass = 'status-' . strtolower($request['status']);
@@ -89,6 +91,8 @@ require_once 'includes/dbh.inc.php';
             echo "<div class='request-details'>";
             echo "<h3>Request #" . htmlspecialchars($request['requestid']) . "</h3>";
             echo "<p><strong>Name:</strong> " . htmlspecialchars($request['fullname']) . "</p>";
+            echo "<p><strong>Email:</strong> " . htmlspecialchars($request['Email']) . "</p>";
+            echo "<p><strong>Phone Number:</strong> " . htmlspecialchars($request['phoneNum']) . "</p>";
             echo "<p><strong>Speciality:</strong> " . htmlspecialchars($request['speciality_Name']) . "</p>";
             echo "<p><strong>Experience:</strong> " . htmlspecialchars($request['experience']) . " years</p>";
             echo "<p><strong>Status:</strong> <span class='" . $statusClass . "'>" . htmlspecialchars($request['status']) . "</span></p>";

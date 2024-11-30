@@ -22,29 +22,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errors["empty_inputs"] = "Fill in all fields";
         }
         require 'config_session.inc.php';
-        $result = get_doctor($pdo, $Email);
+        $result = get_doctor($pdo, $Email, $pwd);
 
         if (is_doctor($result)) {
-            if (!is_password_wrong($pwd, $result["pwd"])) {
-                //go to doctor page
-                $_SESSION["Doctor_ID"] = "Doctor" . "_" . $result['ID'];
-                // $errors["login_correct"] = "Login Successfull!";
 
-            }
+            //go to doctor page
+            $_SESSION["Doctor_ID"] = "Doctor" . "_" . $result['ID'];
+            // $errors["login_correct"] = "Login Successfull!";
+
 
             // if (!is_email_wrong($result) && !is_password_wrong($pwd, $result["pwd"])) {
             //     $errors["login_incorrect"] = "Incorrect Login info!";
             // }
         } else {
-            $result = get_patient($pdo, $Email);
-            $_SESSION['pwd'] = $resultp['pwd'];
+            $result = get_patient($pdo, $Email, $pwd);
+
             if (is_patient($result)) {
-                if (!is_password_wrong($pwd, $result["pwd"])) {
-                    //got to patient page
 
-                    $_SESSION["Patient_ID"] = "Patient" . "_" . $result["ID"];
+                //got to patient page
 
-                }
+                $_SESSION["Patient_ID"] = "Patient" . "_" . $result["ID"];
+
+
             }
 
             // if (!is_email_wrong($result) && !is_password_wrong($pwd, $result["pwd"])) {

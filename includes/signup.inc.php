@@ -5,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $Lname = htmlspecialchars($_POST["Lname"]);
     $Email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
     $pwd = $_POST["pwd"];
+    $verifypwd = $_POST['verifypwd'];
     $phonenum = $_POST["phone"];
     $DOB = $_POST["DOB"];
     $gender = $_POST["gender"];
@@ -20,7 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // ERRORS HANDLERS
 
         $errors = [];
-
+        if ($pwd != $verifypwd) {
+            $errors['Match pwd'] = 'The passwords does not match';
+        }
         if (is_empty_input($Fname, $pwd, $Email)) {
             $errors["empty_inputs"] = "Fill in all fields";
         }
