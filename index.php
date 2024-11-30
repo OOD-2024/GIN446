@@ -3,7 +3,9 @@
     <?php
     require_once 'includes/config_session.inc.php';
     print_r($_SESSION);
-
+    if ($_GET['success'] == 'true') {
+        echo 'alert("Request was sent successfully.")';
+    }
     ?>
 
 
