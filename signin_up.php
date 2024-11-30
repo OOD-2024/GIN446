@@ -260,7 +260,11 @@ require_once 'includes/login_view.inc.php';
         .select-box ol li .country-name {
             margin-left: .4rem;
         }
-
+        a {
+            text-decoration: none;
+            color: #ff6b6b;
+        }
+    
         @keyframes shake {
 
             0%,
@@ -325,6 +329,7 @@ require_once 'includes/login_view.inc.php';
             <button type="submit">Login</button>
         </form>
         <button class="secondary-button" onclick="toggleForms()">Create Account</button>
+        <button class="secondary-button"><a href="index.php">Stay as Guest</a></button>
     </div>
     <?php
     check_login_errors();
@@ -395,6 +400,7 @@ require_once 'includes/login_view.inc.php';
             <button type="submit">Sign Up</button>
         </form>
         <button class="secondary-button" onclick="toggleForms()">Back to Login</button>
+        <button class="secondary-button"><a href="index.php">Stay as Guest</a></button>
     </div>
 
     <script>
