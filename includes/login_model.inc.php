@@ -27,9 +27,9 @@ function get_patient(object $pdo, string $email, $pwd)
 
 function setsessionid($pdo, $email, $sessionId)
 {
-    $query = "update patient set session_id = :sessionid , updated_at = :date where Email= $email";
-    $stmt = @$pdo->prepare($query);
+    $query = "UPDATE patient SET Session_ID = :sessionid WHERE Email = :email;";
+    $stmt = $pdo->prepare($query);
     $stmt->bindParam(":sessionid", $sessionId);
-    $stmt->bindParam(':date', date('Y-m-d H:i:s'));
-
+    $stmt->bindParam(":email", $email);
+    $stmt->execute();
 }

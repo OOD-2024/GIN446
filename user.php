@@ -11,12 +11,12 @@ try {
 
 try {
     require_once 'includes/config_session.inc.php';
-    // $userId = isset($_SESSION['login_user_id']) ? (int) $_SESSION['login_user_id'] : -1;
-    $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    if ($userId === false || $userId === null) {
-        header('HTTP/1.1 403 Forbidden');
-        exit('Invalid user ID');
-    }
+    $userId = isset($_SESSION['login_user_id']) ? (int) $_SESSION['login_user_id'] : -1;
+    // $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    // if ($userId === false || $userId === null) {
+    //     header('HTTP/1.1 403 Forbidden');
+    //     exit('Invalid user ID');
+    // }
     // echo $userId;
     require_once 'includes/user_model.inc.php';
     $user = getPatient_from_id($pdo, $userId);
@@ -162,6 +162,10 @@ $recordsJson = json_encode($records);
                 <div class ="diagnosis-title " >Notes: ' . $rec['Notes'] . '</div></div>';
             }
             echo '</div>';
+        } else {
+            echo '<div class="diagnosis-list">
+            <h2>Diagnosis List</h2> <h2>You are healthy as a horse </h2>'
+            ;
         }
         ?>
         </div>
@@ -185,7 +189,6 @@ $recordsJson = json_encode($records);
 
             <label for="appointment-date">Appointment Date:</label>
             <input type="date" id="appointment-date" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>"
-
                 name="appointment_date" required>
 
             <label for="appointment-start">Start Time:</label>

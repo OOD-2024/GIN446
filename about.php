@@ -1,3 +1,9 @@
+<?php
+
+
+require_once 'includes/config_session.inc.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,12 +26,12 @@
             <a href="#">About</a>
         </div>
         <?php
-            if (!isset($_SESSION['user_session_id']))
-                echo '<a href="signin_up"><button class="register-btn">Register</button></a>';
-            else
-                echo '<a href="user.php"><button class="register-btn">Profile</button></a>
+        if (!isset($_SESSION['user_session_id']))
+            echo '<a href="signin_up"><button class="register-btn">Register</button></a>';
+        else
+            echo '<a href="user.php"><button class="register-btn">Profile</button></a>
                      <a href="logout.php"><button class="register-btn">Logout</button></a>';
-            ?>
+        ?>
     </nav>
 
     <main class="about-container">

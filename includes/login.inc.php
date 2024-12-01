@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (is_doctor($result)) {
 
             //go to doctor page
-            $_SESSION["Doctor_ID"] = "Doctor" . "_" . $result['ID'];
+            $_SESSION["Doctor_ID"] = true;
             // $errors["login_correct"] = "Login Successfull!";
 
 
@@ -62,8 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         regenerate_session_id_loggedin($pdo, $Email);
         $user_session_id = session_id();
-        setsessionid($pdo, $Email, $user_session_id);
         $_SESSION['user_session_id'] = $user_session_id;
+        setsessionid($pdo, $Email, $user_session_id);
 
 
 
