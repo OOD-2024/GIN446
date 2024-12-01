@@ -156,9 +156,14 @@ $recordsJson = json_encode($records);
             foreach ($records as $rec) {
 
                 echo '<div class="diagnosis-item"> 
-                <div class ="diagnosis-title " >' . $rec['diagnosis'] . '</div> </div>';
+                <div class ="diagnosis-title " >Diagnosis: ' . $rec['Diagnosis'] . '</div>
+                <div class ="diagnosis-title " >DiagnosisDate: ' . $rec['DiagnosisDate'] . '</div>
+                <div class ="diagnosis-title " >Treatment: ' . $rec['Treatment'] . '</div>
+                <div class ="diagnosis-title " >Notes: ' . $rec['Notes'] . '</div></div>';
             }
-            ?>
+            echo '</div>';
+        }
+        ?>
         </div>
         <div class="calendar-wrapper">
 
