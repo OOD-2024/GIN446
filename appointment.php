@@ -65,7 +65,7 @@ try {
         </div>
     <?php else: ?>
         <div class="doctor-info">
-            <h2>Dr. <?= h($doctor['First_Name']) ?>     <?= h($doctor['Last_Name']) ?></h2>
+            <h2>Dr. <?= h($doctor['First_Name']) ?> <?= h($doctor['Last_Name']) ?></h2>
             <p>Specialties: <?= h($doctor['specialties']) ?></p>
         </div>
 
@@ -73,6 +73,7 @@ try {
             <div class="fixed-header">
                 <h1 class="current-month"></h1>
                 <div class="calendar" id="calendar-header"></div>
+
             </div>
             <div class="calendar-container">
                 <div class="calendar" id="calendar-body"></div>
@@ -86,10 +87,10 @@ try {
 
     <?php if (!isset($error)): ?>
         <script>
-            // Pass the appointments data to JavaScript
             const events = <?= $eventsJson ?>;
         </script>
         <script type="module" src="/js/schedule.js"></script>
+        <script type="module" src="/js/events.js"></script>
     <?php endif; ?>
 </body>
 

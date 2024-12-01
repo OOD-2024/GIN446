@@ -12,7 +12,7 @@ class Database
         $port = 3308;
         $dbname = 'clinic';
         $dbusername = 'root';
-        $dbpassword = 'pass';
+        $dbpassword = '';
 
         try {
             $this->pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $dbusername, $dbpassword);
