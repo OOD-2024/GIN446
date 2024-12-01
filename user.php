@@ -47,6 +47,7 @@ $recordsJson = json_encode($records);
 // print_r($_SESSION)
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,8 +64,12 @@ $recordsJson = json_encode($records);
         .diagnosis-list {
             width: 100%;
             max-width: 600px;
-            margin: 20px auto;
+            padding-left: 22%;
             font-family: Arial, sans-serif;
+            height: 340px;
+            overflow: auto;
+
+
         }
 
         .diagnosis-item {
@@ -143,9 +148,10 @@ $recordsJson = json_encode($records);
                 </div>
             </div>
         </div>
-        <div class='diagnosis-list'>
-            <h2>Diagnosis List</h2>
-            <?php
+        <?php
+        if ($records) {
+            echo '<div class="diagnosis-list">
+            <h2>Diagnosis List</h2>';
 
             foreach ($records as $rec) {
 

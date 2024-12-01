@@ -62,7 +62,7 @@ ORDER BY a.Appointment_Date
 }
 function get_medical_records($pdo, $patient_id)
 {
-    $query = "Select diagnosis from medical_record  where patient_id = :ID";
+    $query = "Select * from medical_record  where PatientId = :ID";
     try {
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':ID', $patient_id);
