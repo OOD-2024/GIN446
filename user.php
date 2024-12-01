@@ -13,11 +13,11 @@ try {
     require_once 'includes/config_session.inc.php';
     $userId = isset($_SESSION['login_user_id']) ? (int) $_SESSION['login_user_id'] : -1;
     // $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    // if ($userId === false || $userId === null) {
-    //     header('HTTP/1.1 403 Forbidden');
-    //     exit('Invalid user ID');
-    // }
-    // echo $userId;
+    if ($userId === false || $userId === null) {
+        header('HTTP/1.1 403 Forbidden');
+        exit('Invalid user ID');
+    }
+    echo $userId;
     require_once 'includes/user_model.inc.php';
     $user = getPatient_from_id($pdo, $userId);
     $locations = getDoctorLocations($pdo, $userId);
@@ -89,6 +89,77 @@ $recordsJson = json_encode($records);
 
         .accept-button {
             display: none;
+        }
+
+        .form-container {
+            background-color: white;
+            padding-left: 22%;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            padding-left: ;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #2d3748;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        select:hover {
+            border-color: #cbd5e0;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #3182ce;
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.4);
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
         }
     </style>
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
@@ -164,11 +235,32 @@ $recordsJson = json_encode($records);
             echo '</div>';
         } else {
             echo '<div class="diagnosis-list">
-            <h2>Diagnosis List</h2> <h2>You are healthy as a horse </h2>'
+            <h2>Diagnosis List</h2> <div class="diagnosis-item">You are healthy as a horse </div>'
             ;
         }
         ?>
         </div>
+        <div class="form-container">
+            <h2>Select Medical Specialty</h2>
+            <input type="hidden" name="id" value="<?php $_SESSION['Patient_ID'] ?>">
+            <form action="includes/process_request.php" method="POST" id="specialtyForm">
+                <div class="form-group">
+                    <label for="specialty">Choose a Specialty:</label>
+                    <select name="specialty" id="specialty" required>
+                        <option value="">Select a specialty...</option>
+                        <?php foreach ($specialties as $specialty): ?>
+                            <option value="<?php echo htmlspecialchars($specialty['speciality_id']); ?>">
+                                <?php echo htmlspecialchars($specialty['speciality_Name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label> Years of experience </label>
+                    <input type="number" name="experience">
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
         <div class="calendar-wrapper">
 
             <div class="fixed-header">
@@ -226,6 +318,9 @@ $recordsJson = json_encode($records);
                 <button type="submit">Schedule Appointment</button>
             </div>
         </form>
+
+
+
     </main>
 
 

@@ -94,18 +94,18 @@
                     <script>
                         const hasaccepted = localStorage.getItem('disclaimeraccepted');
                         if (!hasaccepted) {
-                            window.onload = function() {
+                            window.onload = function () {
                                 document.getElementById('disclaimer-popup').style.display = 'block';
                             };
 
-                            document.getElementById('accept-btn').onclick = function() {
+                            document.getElementById('accept-btn').onclick = function () {
                                 document.getElementById('disclaimer-popup').style.display = 'none';
                                 localStorage.setItem('disclaimeraccepted', 'true');
                             };
 
 
 
-                            document.getElementById('decline-btn').onclick = function() {
+                            document.getElementById('decline-btn').onclick = function () {
                                 alert('You need to accept the disclaimer to proceed.');
                                 window.location.href = 'https://www.google.com';
                             };
@@ -155,10 +155,22 @@
         </footer>
 
         <script>
-            function display() {
+            function check_session_id() {
+                var session_id = '<?php echo $_SESSION["user_session_id"] ?>';
+                fetch('includes/check_login.inc.php').then(function (response) {
+                    return response.json();
 
-
+                }).then(function (responseData) {
+                    if (responseData.output == 'logout') {
+                        alert("A Login from other device was detected");
+                        window.location.href = 'logout.php';
+                    }
+                })
             }
+            setInterval(function () {
+                check_session_id();
+
+            }, 1000)
         </script>
 
     </body>
