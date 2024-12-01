@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS patient (
 
 CREATE TABLE IF NOT EXISTS doctor (
     ID INT NOT NULL PRIMARY KEY,
-    Start_Date DATE NOT NULL,
+    Start_Date DATE default (CURRENT_DATE),
     FOREIGN KEY (ID) REFERENCES patient(ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -113,3 +113,48 @@ INSERT INTO medical_record (PatientID, Diagnosis, DiagnosisDate, Treatment, Note
 (4, 'Migraine', '2024-03-20', 'Prescribed Sumatriptan', 'Frequent headaches'),
 (5, 'Type 2 Diabetes', '2024-03-23', 'Metformin 500mg', 'HbA1c: 7.2%'),
 (5, 'Anxiety', '2024-03-22', 'Referred to therapy', 'Experiencing work-related stress');
+
+create table requests (
+	requestid int  primary key auto_increment , 
+    patient_id int not null, 
+    fullname varchar(50) not null, 
+    speciality varchar(100) not null,
+    experience int ,  
+    status varchar(20) default'pending',
+    constraint FK_PID foreign key (patient_id) references patient(id) 
+
+);
+CREATE TABLE specialties (
+    Speciality_id INT PRIMARY KEY AUTO_INCREMENT,
+    speciality_Name VARCHAR(100) NOT NULL UNIQUE,
+    constraint FK_ID foreign key (speciality_id) references speciality(speciality_id)
+    
+);
+
+-- Insert common medical specialties found in clinics
+INSERT INTO specialties (speciality_Name) VALUES
+    ('Family Medicine'),
+    ('Internal Medicine'),
+    ('Pediatrics'),
+    ('Obstetrics and Gynecology'),
+    ('Cardiology'),
+    ('Dermatology'),
+    ('Endocrinology'),
+    ('Gastroenterology'),
+    ('Neurology'),
+    ('Orthopedics'),
+    ('Ophthalmology'),
+    ('ENT (Otolaryngology)'),
+    ('Psychiatry'),
+    ('Pulmonology'),
+    ('Rheumatology'),
+    ('Urology'),
+    ('Physical Medicine and Rehabilitation'),
+    ('Allergy and Immunology'),
+    ('Pain Management'),
+    ('Sports Medicine'),
+    ('General Surgery'),
+    ('Nutrition and Dietetics'),
+    ('Dentistry'),
+    ('Psychology'),
+    ('Physical Therapy');

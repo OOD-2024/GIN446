@@ -41,7 +41,8 @@ function is_patient(bool|array $result)
 
 function is_password_wrong(string $pwd, string $resultpwd)
 {
-    if (!$pwd == $resultpwd) {
+
+    if (!$pwd === $resultpwd) {
         return true;
     } else {
         return false;
