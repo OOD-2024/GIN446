@@ -392,3 +392,27 @@ body {
   background-color: #f0f0f0;
   color: black;
 }
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-navigation button {
+  background-color: transparent;
+  color: #333333;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.calendar-navigation button:hover {
+  color: #ff9999;
+}
+
+.calendar-navigation button i {
+  font-size: 1.2rem;
+}

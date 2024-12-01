@@ -81,6 +81,10 @@ $recordsJson = json_encode($records);
             color: #333;
             margin-bottom: 5px;
         }
+
+        .accept-button {
+            display: none;
+        }
     </style>
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
 
@@ -216,10 +220,10 @@ $recordsJson = json_encode($records);
         &copy; 2024 clinic.io. All rights reserved.
     </footer>
     <script>
-        const events = <?php echo $eventsJson; ?>;
+        const eventsJson = <?php echo $eventsJson; ?>;
     </script>
     <script type="module" src="/js/schedule.js"> </script>
-    <script type="module" src="/js/events.js"> </script>
+    <!-- <script type="module" src="/js/events.js"> </script> -->
 </body>
 
 </html>

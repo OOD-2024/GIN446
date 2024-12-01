@@ -29,6 +29,7 @@ function getAppointmentEvents($pdo, $id)
         foreach ($appointments as $apt) {
             $events[] = [
                 'appointmentId' => $apt['AppointmentID'],
+                'appointment_date' => $apt['Appointment_Date'],
                 'name' => $apt['doctor_name'],
                 'doctor' => $apt['doctor_name'],
                 'days' => [getDayOfWeek($apt['Appointment_Date'])],

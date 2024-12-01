@@ -87,10 +87,9 @@ try {
 
     <?php if (!isset($error)): ?>
         <script>
-            const events = <?= $eventsJson ?>;
+            const eventsJson = <?php echo $eventsJson; ?>;
         </script>
-        <script type="module" src="/js/schedule.js"></script>
-        <script type="module" src="/js/events.js"></script>
+        <script type="module" src="/js/schedule.js"> </script>
     <?php endif; ?>
 </body>
 

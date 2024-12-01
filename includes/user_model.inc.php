@@ -17,34 +17,35 @@ function getAllAppointments($pdo, $patient_id)
     $endOfWeek = date('Y-m-d', strtotime('next Saturday'));
 
     $query = "
-       SELECT 
-        a.AppointmentID,
-        a.Appointment_Date,
-        a.StartTime,
-        a.EndTime,
-        a.Note,
-        a.Appointment_Status as status,
-        CONCAT(p.First_Name, ' ', p.Last_Name) as doctor_name,
-        CONCAT(
-            l.City, ', ', 
-            l.Country,
-            CASE 
-                WHEN l.Building IS NOT NULL THEN CONCAT(', ', l.Building)
-                ELSE ''
-            END,
-            CASE 
-                WHEN l.Street IS NOT NULL THEN CONCAT(', ', l.Street)
-                ELSE ''
-            END
-        ) as location,
-        s.Specialty_Name as specialty
-    FROM appointment a
-    INNER JOIN doctor d ON a.DoctorID = d.ID
-    INNER JOIN patient p ON d.ID = p.ID
-    LEFT JOIN location l ON a.LocationID = l.ID
-    LEFT JOIN specialty s ON d.ID = s.DoctorID
-    WHERE (a.patientid = :id or a.doctorid = :id)
-    AND a.Appointment_Date >= CURRENT_DATE;
+  SELECT 
+    a.AppointmentID,
+    a.Appointment_Date,
+    a.StartTime,
+    a.EndTime,
+    a.Note,
+    a.Appointment_Status as status,
+    CONCAT(p.First_Name, ' ', p.Last_Name) as doctor_name,
+    CONCAT(
+        l.City, ', ', 
+        l.Country,
+        CASE 
+            WHEN l.Building IS NOT NULL THEN CONCAT(', ', l.Building)
+            ELSE ''
+        END,
+        CASE 
+            WHEN l.Street IS NOT NULL THEN CONCAT(', ', l.Street)
+            ELSE ''
+        END
+    ) as location,
+    (SELECT GROUP_CONCAT(s.Specialty_Name SEPARATOR ', ') 
+     FROM specialty s WHERE s.DoctorID = d.ID) as specialty
+FROM appointment a
+INNER JOIN doctor d ON a.DoctorID = d.ID
+INNER JOIN patient p ON d.ID = p.ID
+LEFT JOIN location l ON a.LocationID = l.ID
+WHERE (a.patientid = :id OR a.doctorid = :id)
+ORDER BY a.Appointment_Date
+
     ";
 
     try {
