@@ -17,40 +17,48 @@ function getDoctor($pdo, $doctorId)
     $stmt->execute([':doctorId' => $doctorId]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 function getAppointments($pdo, $doctorId)
 {
     $appointmentQuery = "
     SELECT 
-        a.AppointmentID,
-        a.Appointment_Date,
-        a.StartTime,
-        a.EndTime,
-        a.Note,
-        CONCAT(p.First_Name, ' ', p.Last_Name) as doctor_name,
-        CONCAT(
-            l.City, ', ', 
-            l.Country,
-            CASE 
-                WHEN l.Building IS NOT NULL THEN CONCAT(', ', l.Building)
-                ELSE ''
-            END,
-            CASE 
-                WHEN l.Street IS NOT NULL THEN CONCAT(', ', l.Street)
-                ELSE ''
-            END
-        ) as location
-    FROM appointment a
-    INNER JOIN doctor d ON a.DoctorID = d.ID
-    INNER JOIN patient p ON d.ID = p.ID
-    LEFT JOIN location l ON a.LocationID = l.ID
-    WHERE a.DoctorID = :doctorId 
-    AND a.Appointment_Status = 'Available'
-    AND a.Appointment_Date >= CURRENT_DATE
-    ORDER BY a.Appointment_Date ASC, a.StartTime ASC
+    a.AppointmentID,
+    a.Appointment_Date,
+    a.StartTime,
+    a.EndTime,
+    a.Note,
+    a.Appointment_Status as status,
+    CONCAT(p.First_Name, ' ', p.Last_Name) as doctor_name,
+    CONCAT(
+        l.City, ', ', 
+        l.Country,
+        CASE 
+            WHEN l.Building IS NOT NULL THEN CONCAT(', ', l.Building)
+            ELSE ''
+        END,
+        CASE 
+            WHEN l.Street IS NOT NULL THEN CONCAT(', ', l.Street)
+            ELSE ''
+        END
+    ) as location,
+    (SELECT GROUP_CONCAT(DISTINCT s.Specialty_Name SEPARATOR ', ') 
+     FROM specialty s WHERE s.DoctorID = d.ID) as specialty
+FROM appointment a
+INNER JOIN doctor d ON a.DoctorID = d.ID
+INNER JOIN patient p ON d.ID = p.ID
+LEFT JOIN location l ON a.LocationID = l.ID
+WHERE a.DoctorID = :doctorId
+AND a.Appointment_Status = 'Available'
+AND a.Appointment_Date >= CURRENT_DATE
+ORDER BY a.Appointment_Date
 ";
 
-    $stmt = $pdo->prepare($appointmentQuery);
-    $stmt->execute([':doctorId' => $doctorId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    try {
+        $stmt = $pdo->prepare($appointmentQuery);
+        $stmt->execute([':doctorId' => $doctorId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Error fetching appointments: " . $e->getMessage());
+        throw new RuntimeException("Failed to retrieve appointments");
+    }
 }

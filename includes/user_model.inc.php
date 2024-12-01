@@ -11,35 +11,47 @@ function getPatient_from_id($pdo, $patient_id)
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
-function getAppointments($pdo, $patient_id)
+function getAllAppointments($pdo, $patient_id)
 {
     $startOfWeek = date('Y-m-d', strtotime('last Sunday'));
     $endOfWeek = date('Y-m-d', strtotime('next Saturday'));
 
     $query = "
-    SELECT 
-    a.AppointmentId,
-    CONCAT('Dr. ', p.First_Name, ' ', p.Last_Name) as doctor_name,
+  SELECT 
+    a.AppointmentID,
     a.Appointment_Date,
     a.StartTime,
     a.EndTime,
-    CONCAT(l.Building, ', ', l.Street, ', ', l.City, ', ', l.Country) as location,
-    a.Note
-    FROM appointment a
-    JOIN doctor d ON a.DoctorID = d.ID
-    JOIN patient p ON d.ID = p.ID
-    LEFT JOIN location l ON a.LocationID = l.ID
-    WHERE a.PatientID = :id
-    AND a.Appointment_Date BETWEEN :start AND :end
-    AND a.Appointment_Status != 'Cancelled';
+    a.Note,
+    a.Appointment_Status as status,
+    CONCAT(p.First_Name, ' ', p.Last_Name) as doctor_name,
+    CONCAT(
+        l.City, ', ', 
+        l.Country,
+        CASE 
+            WHEN l.Building IS NOT NULL THEN CONCAT(', ', l.Building)
+            ELSE ''
+        END,
+        CASE 
+            WHEN l.Street IS NOT NULL THEN CONCAT(', ', l.Street)
+            ELSE ''
+        END
+    ) as location,
+    (SELECT GROUP_CONCAT(s.Specialty_Name SEPARATOR ', ') 
+     FROM specialty s WHERE s.DoctorID = d.ID) as specialty
+FROM appointment a
+INNER JOIN doctor d ON a.DoctorID = d.ID
+INNER JOIN patient p ON d.ID = p.ID
+LEFT JOIN location l ON a.LocationID = l.ID
+WHERE (a.patientid = :id OR a.doctorid = :id)
+ORDER BY a.Appointment_Date
+
     ";
 
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([
-            ':id' => $patient_id,
-            ':start' => $startOfWeek,
-            ':end' => $endOfWeek
+            ':id' => $patient_id
         ]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -47,7 +59,6 @@ function getAppointments($pdo, $patient_id)
         error_log("Database error in getAppointments: " . $e->getMessage());
         return [];
     }
-
 }
 function get_medical_records($pdo, $patient_id)
 {
@@ -61,5 +72,42 @@ function get_medical_records($pdo, $patient_id)
         error_log("Database error in get_medical_records: " . $e->getMessage());
         return [];
     }
+}
 
+function getDoctorLocations($pdo, $user_id)
+{
+    $query = "SELECT ID, Country, City, Building, Street FROM location l where exists (
+    Select * from doctor_locations dl where dl.doctorid = :id and dl.LocationID = l.id
+    );";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(":id", $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function createAppointment($pdo, $array)
+{
+    try {
+
+        $appointmentDate = $array['appointment_date'];
+        $startTime = $array['start_time'];
+        $endTime = $array['end_time'];
+        $locationId = $array['location_id'];
+        $doctorId = $array['doctor_id'];
+        $patientId = $array['patient_id'];
+
+        $query = "INSERT INTO appointment (DoctorID, PatientID, Appointment_Date, LocationID, StartTime, EndTime, Appointment_Status) 
+        VALUES (:doctor_id, :patient_id, :appointment_date, :location_id, :start_time, :end_time, 'Scheduled')";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':doctor_id', $doctorId, PDO::PARAM_INT);
+        $stmt->bindParam(':patient_id', $patientId, PDO::PARAM_INT);
+        $stmt->bindParam(':appointment_date', $appointmentDate, PDO::PARAM_STR);
+        $stmt->bindParam(':location_id', $locationId, PDO::PARAM_INT);
+        $stmt->bindParam(':start_time', $startTime, PDO::PARAM_STR);
+        $stmt->bindParam(':end_time', $endTime, PDO::PARAM_STR);
+        $stmt->execute();
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
 }

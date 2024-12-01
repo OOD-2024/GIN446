@@ -94,26 +94,24 @@
                     <script>
                         const hasaccepted = localStorage.getItem('disclaimeraccepted');
                         if (!hasaccepted) {
-                            window.onload = function () {
+                            window.onload = function() {
                                 document.getElementById('disclaimer-popup').style.display = 'block';
                             };
 
-                            document.getElementById('accept-btn').onclick = function () {
+                            document.getElementById('accept-btn').onclick = function() {
                                 document.getElementById('disclaimer-popup').style.display = 'none';
                                 localStorage.setItem('disclaimeraccepted', 'true');
                             };
 
 
 
-                            document.getElementById('decline-btn').onclick = function () {
+                            document.getElementById('decline-btn').onclick = function() {
                                 alert('You need to accept the disclaimer to proceed.');
                                 window.location.href = 'https://www.google.com';
                             };
-                        }
-                        else {
+                        } else {
                             document.getElementById('disclaimer-popup').style.display = 'none';
                         }
-
                     </script>
                 </div>
             </div>
@@ -126,9 +124,10 @@
                 <a href="about.php">About</a>
             </div>
             <?php
-            if (!isset($_SESSION['user_session_id']))
-                echo '<a href="signin_up"><button class="register-btn">Register</button></a>';
-            else {
+            if (!isset($_SESSION['user_session_id'])) {
+                echo '
+<a href="signin_up.php"><button class="register-btn">Register</button></a>';
+            } else {
                 echo '<a href="user.php"><button class="register-btn">Profile</button></a>
                      <a href="logout.php"><button class="register-btn">Logout</button></a>';
             }
@@ -156,7 +155,6 @@
         </footer>
 
         <script>
-
             function display() {
 
 

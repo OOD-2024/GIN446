@@ -18,7 +18,6 @@ require_once 'appointment_model.inc.php';
 
 function getAppointmentEvents($pdo, $id)
 {
-
     try {
         $appointments = getAppointments($pdo, $id);
         if (empty($appointments)) {
@@ -27,15 +26,20 @@ function getAppointmentEvents($pdo, $id)
 
         $events = [];
 
-
         foreach ($appointments as $apt) {
             $events[] = [
+                'appointmentId' => $apt['AppointmentID'],
+                'appointment_date' => $apt['Appointment_Date'],
                 'name' => $apt['doctor_name'],
+                'doctor' => $apt['doctor_name'],
                 'days' => [getDayOfWeek($apt['Appointment_Date'])],
                 'startTime' => formatTime($apt['StartTime']),
                 'endTime' => formatTime($apt['EndTime']),
+                'from_time' => formatTime($apt['StartTime']),
+                'to_time' => formatTime($apt['EndTime']),
                 'location' => $apt['location'] ?? '',
-                'note' => $apt['Note'] ?? ''
+                'note' => $apt['Note'] ?? '',
+                'status' => $apt['status'] ?? 'Available',
             ];
         }
 

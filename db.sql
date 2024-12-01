@@ -2,7 +2,13 @@ CREATE DATABASE IF NOT EXISTS clinic;
 
 USE clinic;
 
-CREATE DATABASE IF NOT EXISTS clinic;
+CREATE TABLE IF NOT EXISTS location ( 
+    ID INT PRIMARY KEY AUTO_INCREMENT, 
+    Country VARCHAR(50) NOT NULL, 
+    City VARCHAR(50) NOT NULL, 
+    Building VARCHAR(50), 
+    Street VARCHAR(100)
+);
 
 CREATE TABLE IF NOT EXISTS patient ( 
     ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
@@ -17,7 +23,7 @@ CREATE TABLE IF NOT EXISTS patient (
     Created_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Updated_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
     Session_ID VARCHAR(128) DEFAULT NULL,
-    CONSTRAINT chk_gender CHECK (gender IN ('Male', 'Female', 'Other')),
+    CONSTRAINT chk_gender CHECK (gender IN ('Male', 'Female')),
     CONSTRAINT chk_bloodtype CHECK (BloodType IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'))
 );
 
@@ -27,20 +33,20 @@ CREATE TABLE IF NOT EXISTS doctor (
     FOREIGN KEY (ID) REFERENCES patient(ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS doctor_locations (
+    DoctorID INT NOT NULL,
+    LocationID INT NOT NULL,
+    PRIMARY KEY (DoctorID, LocationID),
+    FOREIGN KEY (DoctorID) REFERENCES doctor(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (LocationID) REFERENCES location(ID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS specialty ( 
     DoctorID INT NOT NULL,
     Specialty_ID INT NOT NULL,
     Specialty_Name VARCHAR(50) NOT NULL,
     PRIMARY KEY (DoctorID, Specialty_ID),
     FOREIGN KEY (DoctorID) REFERENCES doctor(ID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS location ( 
-    ID INT PRIMARY KEY AUTO_INCREMENT, 
-    Country VARCHAR(50) NOT NULL, 
-    City VARCHAR(50) NOT NULL, 
-    Building VARCHAR(50), 
-    Street VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS appointment ( 
@@ -56,7 +62,7 @@ CREATE TABLE IF NOT EXISTS appointment (
     FOREIGN KEY (DoctorID) REFERENCES doctor(ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (PatientID) REFERENCES patient(ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (LocationID) REFERENCES location(ID) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT chk_appointment_status CHECK (Appointment_Status IN ('Scheduled', 'Completed', 'Cancelled', 'Available')),
+    CONSTRAINT chk_appointment_status CHECK (Appointment_Status IN ('Scheduled', 'Pending', 'Completed', 'Cancelled', 'Rejected', 'Available')),
     CONSTRAINT chk_appointment_time CHECK (EndTime > StartTime)
 );
 
@@ -69,8 +75,20 @@ CREATE TABLE IF NOT EXISTS medical_record (
     PRIMARY KEY (PatientID, Diagnosis, DiagnosisDate),
     FOREIGN KEY (PatientID) REFERENCES patient(ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+CREATE TABLE IF NOT EXISTS rejected_appointments (
+    RejectionID INT PRIMARY KEY AUTO_INCREMENT,
+    AppointmentID INT NOT NULL,
+    RejectionDate DATETIME NOT NULL,
+    Reason VARCHAR(255),
+    FOREIGN KEY (AppointmentID) REFERENCES appointment(AppointmentID) ON DELETE CASCADE
+);
 
--- Dumb Data to test
+-- Insert locations
+INSERT INTO location (Country, City, Building, Street) VALUES
+('USA', 'New York', 'Medical Plaza', '123 Health St'),
+('USA', 'Los Angeles', 'Care Center', '456 Wellness Ave'),
+('USA', 'Chicago', 'Healing Hub', '789 Medical Dr');
+
 -- Insert sample patients
 INSERT INTO patient (First_Name, Last_Name, Email, pwd, phoneNum, DOB, gender, BloodType) VALUES
 ('John', 'Doe', 'john.doe@email.com', 'hashedpass123', '+1234567890', '1990-05-15', 'Male', 'O+'),
@@ -79,11 +97,17 @@ INSERT INTO patient (First_Name, Last_Name, Email, pwd, phoneNum, DOB, gender, B
 ('Maria', 'Garcia', 'maria.g@email.com', 'hashedpass101', '+1234567893', '1995-03-28', 'Female', 'AB+'),
 ('James', 'Wilson', 'james.w@email.com', 'hashedpass102', '+1234567894', '1982-07-14', 'Male', 'A-');
 
--- Insert these patients as doctors (assuming they're all doctors)
+-- Insert doctors
 INSERT INTO doctor (ID, Start_Date) VALUES
 (1, '2015-01-15'),  -- John Doe
 (2, '2016-03-01'),  -- Jane Smith
 (3, '2010-06-22');  -- Robert Johnson
+
+-- Insert doctor locations
+INSERT INTO doctor_locations (DoctorID, LocationID) VALUES
+(1, 1),  -- John Doe at New York location
+(2, 2),  -- Jane Smith at Los Angeles location
+(3, 3);  -- Robert Johnson at Chicago location
 
 -- Insert specialties for doctors
 INSERT INTO specialty (DoctorID, Specialty_ID, Specialty_Name) VALUES
@@ -93,19 +117,13 @@ INSERT INTO specialty (DoctorID, Specialty_ID, Specialty_Name) VALUES
 (2, 4, 'Family Medicine'),
 (3, 5, 'Neurology');
 
--- Insert locations
-INSERT INTO location (ID, Country, City, Building, Street) VALUES
-(1, 'USA', 'New York', 'Medical Plaza', '123 Health St'),
-(2, 'USA', 'Los Angeles', 'Care Center', '456 Wellness Ave'),
-(3, 'USA', 'Chicago', 'Healing Hub', '789 Medical Dr');
-
 -- Insert appointments
 INSERT INTO appointment (DoctorID, PatientID, Appointment_Date, LocationID, StartTime, EndTime, Note, Appointment_Status) VALUES
 (1, 4, '2024-11-25', 1, '09:00:00', '10:00:00', 'Regular checkup', 'Scheduled'),
-(2, 5, '2024-11-25', 1, '10:30:00', '11:30:00', 'Follow-up', 'Scheduled'),
-(3, 4, '2024-11-26', 2, '14:00:00', '15:00:00', 'Initial consultation', 'Scheduled'),
+(2, 5, '2024-11-25', 2, '10:30:00', '11:30:00', 'Follow-up', 'Scheduled'),
+(3, 4, '2024-11-26', 3, '14:00:00', '15:00:00', 'Initial consultation', 'Scheduled'),
 (1, 5, '2024-11-24', 1, '11:00:00', '12:00:00', 'Annual physical', 'Completed'),
-(2, 4, '2024-11-23', 3, '13:00:00', '14:00:00', 'Emergency visit', 'Completed');
+(2, 4, '2024-11-23', 2, '13:00:00', '14:00:00', 'Emergency visit', 'Completed');
 
 -- Insert medical records
 INSERT INTO medical_record (PatientID, Diagnosis, DiagnosisDate, Treatment, Notes) VALUES

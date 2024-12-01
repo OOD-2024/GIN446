@@ -187,6 +187,8 @@ body {
   margin-bottom: 5px;
 }
 
+#add-event-form input,
+#add-event-form select,
 #add-event-form input[type="text"],
 #add-event-form input[type="time"] {
   width: 100%;
@@ -195,7 +197,8 @@ body {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-
+.dark-theme #add-event-form input,
+.dark-theme #add-event-form select,
 .dark-theme #add-event-form input[type="text"],
 .dark-theme #add-event-form input[type="time"] {
   background-color: #444;
@@ -308,4 +311,108 @@ body {
   display: block;
   padding: 0 4rem;
   height: 60vh;
+}
+
+/* Event Modal Styles */
+#event-details-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-width: 400px;
+  width: 90%;
+}
+
+#event-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+/* Button Container Styles */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+/* Base Button Styles */
+.base-button {
+  flex-grow: 1;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Accept Button Styles */
+.accept-button {
+  flex-grow: 1;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Reject Button Styles */
+.reject-button {
+  flex-grow: 1;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f44336;
+  color: white;
+}
+
+/* Close Button Styles */
+.close-button {
+  flex-grow: 1;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  color: black;
+}
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-navigation button {
+  background-color: transparent;
+  color: #333333;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.calendar-navigation button:hover {
+  color: #ff9999;
+}
+
+.calendar-navigation button i {
+  font-size: 1.2rem;
 }
