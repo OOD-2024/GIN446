@@ -5,22 +5,18 @@ body {
 }
 
 nav {
-  font-family: 'Margarine', cursive;
   display: flex;
-  padding: 1rem 0rem;
+  justify-content: space-between;
+  padding: 1rem 2rem;
   align-items: center;
   background-color: #ffe8e6;
   border-bottom: 2px solid rgba(0, 0, 0, 1);
   font-weight: 700;
-  position: sticky;
-  top:0;
 }
-
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
-  margin-left: 1.5rem;
 }
 
 .nav-links {
@@ -36,8 +32,8 @@ nav {
   color: #333;
   transition: 0.3s ease;
 }
-.nav-links a:hover{
-  color: #fd6767
+.nav-links a:hover {
+  color: #fd6767;
 }
 
 .profile-avatar {
@@ -78,11 +74,10 @@ nav {
   transition: transform 0.3s ease;
 }
 
-
 .dropdown {
   display: block;
   position: absolute;
-  right:0;
+  right: 0;
   background-color: rgba(255, 169, 169, 0.756);
   min-width: 100%;
   z-index: 1;
@@ -112,7 +107,7 @@ nav {
 }
 
 .register-btn {
-  font-family: 'Margarine', cursive;
+  font-family: "Margarine", cursive;
   background-color: rgba(255, 169, 169, 0);
   padding: 0.5rem 1.5rem;
   font-weight: 700;
@@ -122,10 +117,9 @@ nav {
   cursor: pointer;
   transition: 0.3s ease;
 }
-.register-btn:hover{
-  color:#fd6767;
+.register-btn:hover {
+  color: #fd6767;
 }
-
 
 .active {
   border-bottom: #fd6767 solid;
@@ -133,14 +127,13 @@ nav {
 }
 
 footer {
-  font-family: 'Margarine', cursive;
+  font-family: "Margarine", cursive;
   background-color: #fd6767;
   color: #fff;
   padding: 1rem 2rem;
   text-align: center;
   font-size: 0.9rem;
 }
-
 
 #disclaimer-popup {
   display: block;
@@ -181,7 +174,7 @@ footer {
 }
 
 .popup-buttons button#accept-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 
