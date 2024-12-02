@@ -7,39 +7,129 @@ body {
 nav {
   font-family: 'Margarine', cursive;
   display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: 1rem 0rem;
   align-items: center;
   background-color: #ffe8e6;
   border-bottom: 2px solid rgba(0, 0, 0, 1);
   font-weight: 700;
+  position: sticky;
+  top:0;
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
+  margin-left: 1.5rem;
 }
 
 .nav-links {
   display: flex;
+  align-items: center;
   gap: 2rem;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 .nav-links a {
   text-decoration: none;
   color: #333;
+  transition: 0.3s ease;
+}
+.nav-links a:hover{
+  color: #fd6767
+}
+
+.profile-avatar {
+  margin: 0 1rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: #ffaeae;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #666;
+}
+
+.navdrop {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: right;
+  flex-grow: 0;
+}
+
+.navdrop li {
+  list-style-type: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.navdrop li a {
+  display: flex;
+  align-items: center;
+  padding: 2vh 1.5vw;
+  text-decoration: none;
+  color: white;
+  font-size: 2.4vmin;
+  transition: transform 0.3s ease;
+}
+
+
+.dropdown {
+  display: block;
+  position: absolute;
+  right:0;
+  background-color: rgba(255, 169, 169, 0.756);
+  min-width: 100%;
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0;
+  border-radius: 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.9s ease;
+}
+
+.dropdown li {
+  width: 100%;
+}
+
+.dropdown li a {
+  padding: 1.5vh 1vw;
+  text-decoration: none;
+  color: white;
+  display: block;
+  text-align: center;
+}
+
+.navdrop li:hover .dropdown {
+  max-height: 500px;
 }
 
 .register-btn {
   font-family: 'Margarine', cursive;
-  background-color: #ff9999;
+  background-color: rgba(255, 169, 169, 0);
   padding: 0.5rem 1.5rem;
-  border-radius: 20px;
   font-weight: 700;
+  font-size: 1rem;
   border: none;
   color: #333;
   cursor: pointer;
+  transition: 0.3s ease;
+}
+.register-btn:hover{
+  color:#fd6767;
+}
+
+
+.active {
+  border-bottom: #fd6767 solid;
+  border-radius: 5px;
 }
 
 footer {

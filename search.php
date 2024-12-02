@@ -1,5 +1,7 @@
 <?php
 require_once 'includes/dbh.inc.php';
+require_once 'includes/config_session.inc.php';
+require_once 'includes/user_model.inc.php';
 try {
     $db = Database::getInstance();
     $pdo = $db->getConnection();
@@ -62,10 +64,36 @@ function h($str)
         <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
-            <a href="#">Services</a>
+            <a href="#" class="active">Services</a>
             <a href="about.php">About</a>
         </div>
-        <button class="register-btn">Register</button>
+        <ul id="drop" class="navdrop">
+                <li>
+                    <div class="profile-avatar">
+                    <?php
+                        if (!isset($_SESSION['login_user_id'])) {
+                            echo ' <div class="profile-avatar" style="font-size:1.2rem">Guest</div>';
+                        }
+                         else {
+                            $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
+                            echo strtoupper(substr($user['First_Name'], 0, 1));
+                              echo strtoupper(substr($user['Last_Name'], 0, 1));
+                        }
+                        ?>
+                    </div>
+                    
+                    <ul class="dropdown">
+                        <?php
+                        if (!isset($_SESSION['login_user_id'])) {
+                            echo '<li><a href="signin_up.php"><button class="register-btn">Register</button></a></li>';
+                        } else {
+                            echo '<li><a href="user.php"><button class="register-btn">Profile</button></a></li>
+                                <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>';
+                        }
+                        ?>
+                    </ul>
+                </li>
+            </ul>
     </nav>
 
     <main>

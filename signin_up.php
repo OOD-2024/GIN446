@@ -4,6 +4,7 @@ require_once 'includes/config_session.inc.php';
 require_once 'includes/signup_view.inc.php';
 
 require_once 'includes/login_view.inc.php';
+
 if (isset($_SESSION['login_user_id'])) {
     http_response_code(404);
     header('Location: ./404.php');
