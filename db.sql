@@ -91,7 +91,6 @@ CREATE TABLE CV_PDF (
     upload_date DATETIME NOT NULL, 
     constraint FK_PID foreign key  (patient_id)  references patient (ID)  
 );
-=======
 
 create table requests (
 	requestid int  primary key auto_increment , 

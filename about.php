@@ -42,6 +42,11 @@ $pdo = $db->getConnection();
                     </div>
                     <ul class="dropdown">
                         <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
+                        <?php 
+                                if(!isset($_Session['Doctor_ID'])){
+                                   echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
+                                }
+                        ?>
                         <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
                     </ul>
                 </li>

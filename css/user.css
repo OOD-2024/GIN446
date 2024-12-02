@@ -59,20 +59,18 @@
 }
 .diagnosis-list {
   width: 100%;
-  max-width: 600px;
-  padding-left: 25%;
+  max-width: 800px;
+  margin: auto;
   font-family: Arial, sans-serif;
   height: auto;
   overflow: auto;
-
-
 }
 
 .diagnosis-item {
   padding: 15px;
   margin-bottom: 10px;
   background-color: #f5f5f5;
-  border-left: 4px solid #2196f3;
+  border-left: 4px solid #ffaeae;
   border-radius: 4px;
 }
 

@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/config_session.inc.php';
 require_once 'includes/dbh.inc.php';
+require_once 'includes/user_model.inc.php';
 
 try {
     // Create database connection
@@ -33,7 +34,6 @@ try {
 <head>
     <title>Select Specialty</title>
     <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
-
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,7 +42,7 @@ try {
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f5f7fa;
+            background-color: #ffe8e6;
         }
 
         .form-container {
@@ -96,7 +96,7 @@ try {
         button {
             width: 100%;
             padding: 0.75rem;
-            background-color: #4299e1;
+            background-color: #ff6b6b;
             color: white;
             border: none;
             border-radius: 6px;
@@ -107,14 +107,23 @@ try {
         }
 
         button:hover {
-            background-color: #3182ce;
+            background-color: #ff6b3b;
         }
 
         button:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.4);
         }
-
+        #back{
+            margin: 1rem 0;
+            background-color: white;
+            border: 1.5px solid #ff6b6b;
+        }
+        #back a{
+            color:#ff6b6b;
+            text-decoration: none;
+        }
+        
         .error-message {
             color: #e53e3e;
             font-size: 0.875rem;
@@ -122,7 +131,7 @@ try {
         }
 
         .request-list {
-            max-width: 800px;
+            max-width: 900px;
             margin: 20px auto;
         }
 
@@ -130,7 +139,7 @@ try {
             border: 1px solid #ddd;
             margin: 10px 0;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 20px;
             background-color: #f9f9f9;
         }
 
@@ -192,6 +201,7 @@ try {
                 echo "<p><strong>Speciality:</strong> " . htmlspecialchars($request['speciality_Name']) . "</p>";
                 echo "<p><strong>Experience:</strong> " . htmlspecialchars($request['experience']) . " years</p>";
                 echo "<p><strong>Status:</strong> <span class='" . $statusClass . "'>" . htmlspecialchars($request['status']) . "</span></p>";
+                echo " <button id='back'><a href='index.php'>Return to Home</a></button>";
                 echo "</div>";
                 echo "</div>";
                 echo "</div>";
@@ -201,7 +211,7 @@ try {
 
             } else { ?>
                 <div class="form-container" id="form-container">
-                    <h2>Apply to join us as a doctor</h2>
+                    <h2>Apply to Join us as a Doctor</h2>
                     <input type="hidden" name="id" value="$_SESSION['Patient_ID']">
                     <form action="includes/process_request.php" method="POST" id="specialtyForm" enctype="multipart/form-data">
                         <div class="form-group">
@@ -214,12 +224,13 @@ try {
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                            <label> Years of experience </label>
+                            <label>Years of experience: </label>
                             <input type="number" name="experience" required>
-                            Upload your CV(PDF).
-                            <input type="file" name="pdfFile" accept=".pdf" required>
+                            <label>Upload your CV(PDF):</label>
+                            <input type="file" name="pdfFile" accept=".pdf">
                         </div>
                         <button type="submit">Submit</button>
+                        <button id="back"><a href="index.php">Return to Home</a></button>
                     </form>
                 </div>
             </div>
