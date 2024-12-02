@@ -1,6 +1,7 @@
 <?php
 
 require_once 'includes/dbh.inc.php';
+require_once 'includes/config_session.inc.php';
 
 ?>
 <!DOCTYPE html>
@@ -29,6 +30,13 @@ require_once 'includes/dbh.inc.php';
     try {
         $db = Database::getInstance();
         $pdo = $db->getConnection();
+
+        $admins_ID = [117, 137, 69];
+
+
+        if (!in_array($_SESSION['login_user_id'], $admins_ID)) {
+            header('Location:404.php');
+        }
 
         $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id;');
         $stmt->execute();
