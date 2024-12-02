@@ -13,7 +13,7 @@
 
 <body>
     <nav>
-        <div class="logo">Clinic.io</div>
+        <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
             <a href="search.php">Services</a>

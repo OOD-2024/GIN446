@@ -25,13 +25,9 @@ try {
         if ($result) {
             $_SESSION['applied'] = 'true';
             header('Location:index.php');
-
         }
     }
-
-
 } catch (PDOException $e) {
-
 }
 ?>
 
@@ -41,6 +37,8 @@ try {
 
 <head>
     <title>Select Specialty</title>
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -205,7 +203,7 @@ try {
     </div>
 
     <script>
-        document.getElementById('specialtyForm').addEventListener('submit', function (e) {
+        document.getElementById('specialtyForm').addEventListener('submit', function(e) {
             const specialty = document.getElementById('specialty').value;
             if (!specialty) {
                 e.preventDefault();

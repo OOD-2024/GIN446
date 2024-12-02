@@ -18,7 +18,6 @@ const STATUS_COLORS = {
   Rejected: "#FF0000", // Red
 };
 function showEventDetails(event) {
-  // Create modal container if it doesn't exist
   let modal = document.getElementById("event-details-modal");
   if (!modal) {
     modal = document.createElement("div");
@@ -26,20 +25,17 @@ function showEventDetails(event) {
 
     document.body.appendChild(modal);
 
-    // Add close button and overlay
     const overlay = document.createElement("div");
     overlay.id = "event-details-overlay";
 
     document.body.appendChild(overlay);
 
-    // Close modal when clicking overlay
     overlay.addEventListener("click", () => {
       modal.style.display = "none";
       overlay.style.display = "none";
     });
   }
 
-  // Determine which buttons to show based on event status
   let buttonHTML = "";
   switch (event.status) {
     case "Available":
@@ -69,7 +65,6 @@ function showEventDetails(event) {
     default: // Status = Completed, Cancelled, Rejected
   }
 
-  // Populate modal with event details
   modal.innerHTML = `
         <h2 style="margin-bottom: 15px;">${event.name}</h2>
         <p><strong>Location:</strong> ${event.location}</p>
@@ -80,18 +75,24 @@ function showEventDetails(event) {
         ${buttonHTML}
       `;
 
-  // Show modal and overlay
   const overlay = document.getElementById("event-details-overlay");
   modal.style.display = "block";
   overlay.style.display = "block";
 
-  // Add event listeners for buttons based on status
   switch (event.status) {
     case "Available":
       const bookButton = document.getElementById("book-event");
       bookButton.addEventListener("click", () => {
-        // Book appointment with patient ID
-        fetch("../includes/schedule.inc.php", {
+        if (!document.getElementById("login_id")) {
+          window.location.href =
+            window.location.pathname.split("/").slice(0, -1).join("/") +
+            "/login.php";
+
+          return;
+        }
+
+        let patient_id = document.getElementById("login_id").innerText;
+        fetch("includes/schedule.inc.php", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -99,8 +100,7 @@ function showEventDetails(event) {
           body: JSON.stringify({
             appointmentId: event.appointmentId,
             action: "book",
-            // patientId: getCurrentPatientId(), // Assume this function exists to get current patient ID
-            patientId: 2,
+            patientId: patient_id,
           }),
         })
           .then((response) => {
@@ -120,7 +120,6 @@ function showEventDetails(event) {
             }
           })
           .catch((error) => {
-            console.error("Error:", error);
             alert("An error occurred while booking the appointment");
           });
       });
@@ -134,7 +133,7 @@ function showEventDetails(event) {
       );
 
       cancelAppointmentButton.addEventListener("click", () => {
-        fetch("../includes/schedule.inc.php", {
+        fetch("includes/schedule.inc.php", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -167,7 +166,7 @@ function showEventDetails(event) {
       });
 
       confirmAppointmentButton.addEventListener("click", () => {
-        fetch("../includes/schedule.inc.php", {
+        fetch("includes/schedule.inc.php", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -205,7 +204,7 @@ function showEventDetails(event) {
       const acceptButton = document.getElementById("accept-event");
 
       rejectButton.addEventListener("click", () => {
-        fetch("../includes/schedule.inc.php", {
+        fetch("includes/schedule.inc.php", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -223,7 +222,6 @@ function showEventDetails(event) {
           })
           .then((data) => {
             if (data.success) {
-              // Log rejection in database and reset to available
               return fetch("../includes/log_rejection.inc.php", {
                 method: "POST",
                 headers: {
@@ -254,7 +252,7 @@ function showEventDetails(event) {
       });
 
       acceptButton.addEventListener("click", () => {
-        fetch("../includes/schedule.inc.php", {
+        fetch("includes/schedule.inc.php", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -389,11 +387,9 @@ class WeeklyCalendar {
   generateWeeklyCalendar() {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    // Time column
     this.calendarHeader.innerHTML =
       '<div class="time" style="width: 52px;"> </div>';
 
-    // Generate header for the current week
     for (let day = 0; day < 7; day++) {
       const currentDate = new Date(this.currentWeekStart);
       currentDate.setDate(this.currentWeekStart.getDate() + day);
@@ -455,18 +451,17 @@ class WeeklyCalendar {
   }
   displayEvents() {
     const weekStart = new Date(this.currentWeekStart);
-    weekStart.setHours(0, 0, 0, 0); // Reset to start of day
+    weekStart.setHours(0, 0, 0, 0);
 
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekEnd.getDate() + 6);
-    weekEnd.setHours(23, 59, 59, 999); // Set to end of day
+    weekEnd.setHours(23, 59, 59, 999);
 
     const relevantEvents = [];
     for (const event of this.events) {
       const eventDate = new Date(event.appointment_date);
 
       if (eventDate > weekEnd) {
-        // Since events are sorted, we can break once we go past the week
         break;
       }
 
@@ -492,21 +487,17 @@ class WeeklyCalendar {
     if (cell) {
       const eventDiv = document.createElement("div");
       eventDiv.className = "event";
-      // Store appointmentId as a data attribute for easy access
       eventDiv.dataset.appointmentId = event.appointmentId;
       eventDiv.innerHTML = `${event.name}<br>${event.startTime} - ${event.endTime}`;
 
-      // Apply status-based color
       eventDiv.style.backgroundColor =
         STATUS_COLORS[event.status] || STATUS_COLORS.Available;
 
-      // Calculate and apply event style
       eventDiv.style.cssText += calculateEventStyle(
         event.startTime,
         event.endTime
       );
 
-      // Add click event to show more details
       eventDiv.addEventListener("click", () => {
         showEventDetails(event);
       });
@@ -518,7 +509,6 @@ class WeeklyCalendar {
 
 document.addEventListener("DOMContentLoaded", function () {
   setThemeBasedOnBrowserPreference();
-  console.log(eventsJson);
 
   const calendar = new WeeklyCalendar(eventsJson, {
     startDate: new Date(),
@@ -528,7 +518,6 @@ document.addEventListener("DOMContentLoaded", function () {
   scrollToCurrentTime();
 });
 
-// Add Event Form-related functions
 const addEventBtn = document.getElementById("add-event-btn");
 if (addEventBtn) {
   addEventBtn.addEventListener("click", showAddEventForm);

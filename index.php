@@ -12,7 +12,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <link rel="shortcut icon" href="/public/favicon.png" type="image/x-icon">
+        <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
 
         <title>Clinic</title>
 
@@ -61,7 +61,7 @@
             </div>
         </div>
         <nav>
-            <div class="logo">Clinic.io</div>
+            <div class="logo">Cinlic</div>
             <div class="nav-links">
                 <a href="#">Home</a>
                 <a href="search.php">Services</a>
@@ -71,6 +71,10 @@
             if (!isset($_SESSION['user_session_id'])) {
                 echo '
             <a href="signin_up.php"><button class="register-btn">Register</button></a>';
+=======
+            if (!isset($_SESSION['login_user_id'])) {
+                echo '<a href="signin_up.php"><button class="register-btn">Register</button></a>';
+
             } else {
                 echo '<a href="user.php"><button class="register-btn">Profile</button></a>
                      <a href="logout.php"><button class="register-btn">Logout</button></a>';

@@ -3,6 +3,7 @@ require_once 'includes/dbh.inc.php';
 
 // Helper functions
 require_once 'includes/appointment_controller.inc.php';
+require_once 'includes/config_session.inc.php';
 
 try {
     $db = Database::getInstance();
@@ -23,7 +24,6 @@ try {
         throw new Exception("Doctor not found");
     }
 
-
     $events = getAppointmentEvents($pdo, $doctorId);
 
     $eventsJson = json_encode($events);
@@ -31,6 +31,7 @@ try {
     error_log("Error in appointment.php: " . $e->getMessage());
     $error = "An error occurred while loading the appointments. Please try again later.";
 }
+print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,14 +51,15 @@ try {
 
 <body>
     <nav>
-        <div class="logo">Clinic.io</div>
+        <div class="logo">Cinlic</div>
         <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/search.php">Services</a>
-            <a href="/about.php">About</a>
+            <a href="index.php">Home</a>
+            <a href="search.php">Services</a>
+            <a href="about.php">About</a>
         </div>
         <button class="register-btn">Log In</button>
     </nav>
+    <?php if (isset($_SESSION['login_user_id'])) echo "<div id='login_id' hidden>" . $_SESSION['login_user_id'] . "</div>" ?>
 
     <?php if (isset($error)): ?>
         <div class="error-message">
@@ -89,7 +91,7 @@ try {
         <script>
             const eventsJson = <?php echo $eventsJson; ?>;
         </script>
-        <script type="module" src="/js/schedule.js"> </script>
+        <script type="module" src="js/schedule.js"> </script>
     <?php endif; ?>
 </body>
 
