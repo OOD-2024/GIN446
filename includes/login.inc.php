@@ -23,7 +23,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errors["empty_inputs"] = "Fill in all fields";
         }
         require 'config_session.inc.php';
+
+        $result = get_doctor($pdo, $Email, $pwd);
+
+        if (is_doctor($result)) {
+
+            //go to doctor page
+            $_SESSION["Doctor_ID"] = true;
+            // $errors["login_correct"] = "Login Successfull!";
+
+
+            // if (!is_email_wrong($result) && !is_password_wrong($pwd, $result["pwd"])) {
+            //     $errors["login_incorrect"] = "Incorrect Login info!";
+            // }
+        } else {
+            $result = get_patient($pdo, $Email, $pwd);
+
+            if (is_patient($result)) {
+
+                //got to patient page
+
         $result = get_patient($pdo, $Email, $pwd);
+
 
 
         if ($result == false) {
@@ -36,6 +57,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header('Location: ../signin_up.php');
             die();
         }
+
+        regenerate_session_id_loggedin($pdo, $Email);
+        $user_session_id = session_id();
+        $_SESSION['user_session_id'] = $user_session_id;
+        setsessionid($pdo, $Email, $user_session_id);
+
         // regenerate_session_id_loggedin($pdo, $Email);
         // $user_session_id = session_id();
         // setsessionid($pdo, $Email, $user_session_id);
@@ -46,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         $_SESSION['login_user_id'] = $result['ID'];
+
 
 
 

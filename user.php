@@ -11,6 +11,15 @@ try {
 
 try {
     require_once 'includes/config_session.inc.php';
+
+    $userId = isset($_SESSION['login_user_id']) ? $_SESSION['login_user_id'] : -1;
+    // $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    if ($userId === false || $userId === null) {
+        header('HTTP/1.1 403 Forbidden');
+        exit('Invalid user ID');
+    }
+    echo $userId;
+
     if (!isset($_SESSION['login_user_id'])) {
         http_response_code(403);
         die();
@@ -23,6 +32,7 @@ try {
     //     exit('Invalid user ID');
     // }
     // echo $userId;
+
     require_once 'includes/user_model.inc.php';
     $user = getPatient_from_id($pdo, $userId);
     $locations = getDoctorLocations($pdo, $userId);
@@ -31,6 +41,30 @@ try {
         http_response_code(403);
         exit();
     }
+
+
+    $stmt = $pdo->prepare("SELECT speciality_id, speciality_Name FROM specialties ORDER BY speciality_Name");
+    $stmt->execute();
+    $specialties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    $stmt = $pdo->prepare("Select * from requests where patient_id = :pid");
+    $stmt->bindParam(":pid", $_SESSION['login_user_id']);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id and patient_id = :id;');
+    $stmt->bindParam(":id", $_SESSION["login_user_id"]);
+    $stmt->execute();
+    $request = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+    if (!isset($_SESSION['Patient_ID'])) {
+        header('Location:404.php');
+    }
+
+
+
 } catch (PDOException $e) {
     die("Query failed: " . $e->getMessage());
 }
@@ -65,37 +99,6 @@ print_r($_SESSION)
     <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <style>
-        .diagnosis-list {
-            width: 100%;
-            max-width: 600px;
-            padding-left: 22%;
-            font-family: Arial, sans-serif;
-            height: 340px;
-            overflow: auto;
-
-
-        }
-
-        .diagnosis-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            background-color: #f5f5f5;
-            border-left: 4px solid #2196f3;
-            border-radius: 4px;
-        }
-
-
-        .diagnosis-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        #book-event {
-            display: none;
-        }
-    </style>
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
 
 </head>
@@ -167,9 +170,65 @@ print_r($_SESSION)
                 <div class ="diagnosis-title " >Notes: ' . $rec['Notes'] . '</div></div>';
             }
             echo '</div>';
+        } else {
+            echo '<div class="diagnosis-list">
+            <h2>Diagnosis List</h2> <div class="diagnosis-item">You are healthy as a horse </div>'
+            ;
         }
         ?>
         </div>
+        <?php if (!isset($_SESSION['Doctor_ID'])) { ?>
+            <div>
+                <?php if ($result) {
+                    echo '              
+                <div class="request-display" id="request-display">';
+
+                    $statusClass = "status-" . strtolower($request['status']);
+                    echo "<div class='request-item'>";
+                    echo "<div class='request-details'>";
+                    echo "<h3>Request #" . htmlspecialchars($request['requestid']) . "</h3>";
+                    echo "<p><strong>Name:</strong> " . htmlspecialchars($request['fullname']) . "</p>";
+                    echo "<p><strong>Email:</strong> " . htmlspecialchars($request['Email']) . "</p>";
+                    echo "<p><strong>Phone Number:</strong> " . htmlspecialchars($request['phoneNum']) . "</p>";
+                    echo "<p><strong>Speciality:</strong> " . htmlspecialchars($request['speciality_Name']) . "</p>";
+                    echo "<p><strong>Experience:</strong> " . htmlspecialchars($request['experience']) . " years</p>";
+                    echo "<p><strong>Status:</strong> <span class='" . $statusClass . "'>" . htmlspecialchars($request['status']) . "</span></p>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+
+
+
+                } else { ?>
+                    <div class="form-container" id="form-container">
+                        <h2>Apply to join us as a doctor</h2>
+                        <input type="hidden" name="id" value="$_SESSION['Patient_ID']">
+                        <form action="includes/process_request.php" method="POST" id="specialtyForm"
+                            enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="specialty">Choose a Specialty:</label>
+                                <select name="specialty" id="specialty" required>
+                                    <option value="">Select a specialty...</option>
+                                    <?php foreach ($specialties as $specialty): ?>
+                                        <option value="<?php echo htmlspecialchars($specialty["speciality_id"]); ?>">
+                                            <?php echo htmlspecialchars($specialty["speciality_Name"]); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label> Years of experience </label>
+                                <input type="number" name="experience" required>
+                                Upload your CV(PDF).
+                                <input type="file" name="pdfFile" accept=".pdf" required>
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            <?php }
+        } ?>
+
+
         <div class="calendar-wrapper">
 
             <div class="fixed-header">
@@ -186,6 +245,55 @@ print_r($_SESSION)
             </div>
 
         </div>
+
+        <form id="add-event-form" style="display: none">
+            <h2>Schedule New Appointment</h2>
+            <input type="hidden" id="doctor-id" name="doctor_id" value="<?php echo $userId; ?>">
+            <input type="hidden" id="doctor-id" name="patient_id" value="<?php echo $userId; ?>">
+
+            <label for="appointment-date">Appointment Date:</label>
+            <input type="date" id="appointment-date" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>"
+                name="appointment_date" required>
+
+            <label for="appointment-start">Start Time:</label>
+            <input type="time" id="appointment-start" name="start_time" required>
+
+            <label for="appointment-end">End Time:</label>
+            <input type="time" id="appointment-end" name="end_time" required>
+
+            <label for="location">Location:</label>
+
+            <select id="location" name="location_id" required>
+                <option value="">Select Location</option>
+                <?php
+                if (empty($locations)) {
+                    echo "<option value=''>No locations available</option>";
+                    return;
+                }
+
+                foreach ($locations as $row) {
+                    $location_description = implode(", ", array_filter([
+                        $row['Building'],
+                        $row['Street'],
+                        $row['City'],
+                        $row['Country']
+                    ]));
+                    echo "<option value='" . htmlspecialchars($row['ID']) . "'>" .
+                        htmlspecialchars($location_description) . "</option>";
+                }
+
+                ?>
+            </select>
+
+            <div class="form-buttons">
+                <button type="button" id="cancel-add-event">Cancel</button>
+                <button type="submit">Schedule Appointment</button>
+            </div>
+        </form>
+
+
+
+
         <?php if ($is_doctor): ?>
             <form id="add-event-form" style="display: none">
                 <h2>Schedule New Appointment</h2>
@@ -233,6 +341,7 @@ print_r($_SESSION)
                 </div>
             </form>
         <?php endif; ?>
+
     </main>
 
 
@@ -240,11 +349,24 @@ print_r($_SESSION)
     <footer>
         &copy; 2024 clinic.io. All rights reserved.
     </footer>
+    <script type="module" src="js/schedule.js"> </script>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
+
+        document.getElementById('specialtyForm').addEventListener('submit', function (e) {
+            const specialty = document.getElementById('specialty').value;
+            if (!specialty) {
+                e.preventDefault();
+                alert('Please select a specialty');
+            }
+        });
+    </script>
+
+=======
         console.log(eventsJson);
     </script>
     <script type="module" src="./js/schedule.js"> </script>
+
 </body>
 
 </html>
