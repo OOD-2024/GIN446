@@ -1,5 +1,6 @@
 <?php
 require_once 'includes/dbh.inc.php';
+require_once 'includes/schedule_view.inc.php';
 try {
 
     $db = Database::getInstance();
@@ -17,12 +18,7 @@ try {
     }
     $userId = $_SESSION['login_user_id'];
     $is_doctor = isset($_SESSION['Doctor_ID']);
-    // $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    // if ($userId === false || $userId === null) {
-    //     header('HTTP/1.1 403 Forbidden');
-    //     exit('Invalid user ID');
-    // }
-    // echo $userId;
+
     require_once 'includes/user_model.inc.php';
     $user = getPatient_from_id($pdo, $userId);
     $locations = getDoctorLocations($pdo, $userId);
@@ -67,7 +63,69 @@ print_r($_SESSION)
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
+    <style>
+        #error-notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 300px;
+        }
 
+        /* Error Card Styles */
+        .error-card {
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-in forwards;
+            animation-delay: 0s, 5s;
+        }
+
+        .error-card .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .error-card .close-btn:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -259,6 +317,61 @@ print_r($_SESSION)
     <footer>
         &copy; 2024 clinic.io. All rights reserved.
     </footer>
+    <script>
+        class ErrorNotification {
+            static init() {
+                // Create container if it doesn't exist
+                if (!document.getElementById('error-notification-container')) {
+                    const container = document.createElement('div');
+                    container.id = 'error-notification-container';
+                    document.body.appendChild(container);
+                }
+            }
+
+            static show(message, type = 'error') {
+                // Ensure container exists
+                this.init();
+
+                const container = document.getElementById('error-notification-container');
+
+                // Create error card
+                const errorCard = document.createElement('div');
+                errorCard.className = `error-card ${type}-card`;
+
+                // Create close button
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-btn';
+                closeBtn.innerHTML = '&times;';
+                closeBtn.addEventListener('click', () => {
+                    errorCard.remove();
+                });
+
+                // Set card content
+                errorCard.innerHTML = `
+            <p>${message}</p>
+        `;
+                errorCard.appendChild(closeBtn);
+
+                // Add to container
+                container.appendChild(errorCard);
+
+                // Automatically remove after animation
+                setTimeout(() => {
+                    if (errorCard.parentNode) {
+                        errorCard.remove();
+                    }
+                }, 5500); // Slightly longer than CSS animation
+            }
+
+            static handleFetchErrors(response) {
+                if (!response.ok) {
+                    this.show(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response;
+            }
+        }
+    </script>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
     </script>

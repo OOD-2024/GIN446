@@ -94,7 +94,7 @@ if (isset($_SESSION['login_user_id'])) {
             </div>
             <div class="form-group">
                 <label>Date of Birth</label>
-                <input type="date" name="DOB" required>
+                <input type="date" name="DOB" min="<?php echo date('Y-m-d', strtotime('-100 year')); ?>" max="<?php echo date('Y-m-d', strtotime('-1 day')); ?>" required>
             </div>
             <div class="form-group">
                 <select name="gender" required>

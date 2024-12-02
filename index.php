@@ -1,29 +1,25 @@
+<?php
+require_once 'includes/config_session.inc.php';
+print_r($_SESSION);
+?>
+
 <!DOCTYPE html>
-<lang="en">
-    <?php
-    require_once 'includes/config_session.inc.php';
-    print_r($_SESSION);
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
 
+    <title>Clinic</title>
 
-    ?>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
 
+</head>
 
+<body>
 
-    <head>
-        <meta charset="UTF-8">
-        <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
-
-        <title>Clinic</title>
-
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/layout.css">
-
-    </head>
-
-    <body>
-
-
+    <?php if (!isset($_SESSION['first_time'])): ?>
         <div id="disclaimer-popup">
             <div class="popup-content">
                 <h2>Disclaimer</h2>
@@ -36,28 +32,25 @@
                     <button id="accept-btn">I Understand </button>
                     <button id="decline-btn">Leave Website</button>
 
+                    <?php $_SESSION['first_time'] = true; ?>
+
                     <script>
-                        <?php if (!isset($_SESSION['first_time'])) {
-                            $_SESSION['first_time'] = true; ?>
+                        window.onload = function() {
+                            document.getElementById('disclaimer-popup').style.display = 'block';
 
-                            window.onload = function () {
-                                document.getElementById('disclaimer-popup').style.display = 'block';
-                            };
-
-                            document.getElementById('accept-btn').onclick = function () {
+                            document.getElementById('accept-btn').onclick = function() {
                                 document.getElementById('disclaimer-popup').style.display = 'none';
                                 localStorage.setItem('disclaimeraccepted', 'true');
                             };
 
-                            document.getElementById('decline-btn').onclick = function () {
+                            document.getElementById('decline-btn').onclick = function() {
                                 alert('You need to accept the disclaimer to proceed.');
                                 window.location.href = 'https://www.google.com';
                             };
-                        <?php } else { ?>
-                            document.getElementById('disclaimer-popup').style.display = 'none';
-                        <?php } ?>
+                        };
                     </script>
                 </div>
+            <?php endif; ?>
             </div>
         </div>
         <nav>
@@ -71,20 +64,11 @@
             if (!isset($_SESSION['user_session_id'])) {
                 echo '
             <a href="signin_up.php"><button class="register-btn">Register</button></a>';
-            }
-            if (!isset($_SESSION['login_user_id'])) {
-                echo '<a href="signin_up.php"><button class="register-btn">Register</button></a>';
-
             } else {
                 echo '<a href="user.php"><button class="register-btn">Profile</button></a>
                      <a href="logout.php"><button class="register-btn">Logout</button></a>';
             }
-
-
             ?>
-
-
-
         </nav>
 
         <div class="hero">
@@ -100,26 +84,8 @@
             &copy; 2024 clinic.io. All rights reserved.
         </footer>
 
-        <script>
-            function check_session_id() {
-                var session_id = '<?php echo $_SESSION["user_session_id"] ?>';
-                fetch('includes/check_login.inc.php').then(function (response) {
-                    return response.json();
 
-                }).then(function (responseData) {
-                    if (responseData.output == 'logout') {
-                        alert("A Login from other device was detected");
-                        window.location.href = 'logout.php';
-                    }
-                })
-            }
-            setInterval(function () {
-                check_session_id();
-
-            }, 1000)
-        </script>
-
-    </body>
+</body>
 
 
-    </html>
+</html>
