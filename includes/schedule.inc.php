@@ -2,7 +2,7 @@
 require_once 'dbh.inc.php';
 $db = Database::getInstance();
 $pdo = $db->getConnection();
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {

@@ -92,7 +92,8 @@ print_r($_SESSION)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/user.css ">
+    <link rel="stylesheet" href="css/user.css">
+    <link rel="stylesheet" href="css/appointment_summary.css">
     <link rel="stylesheet" href="css/schedule.css">
     <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -175,58 +176,56 @@ print_r($_SESSION)
         }
         ?>
         </div>
-        <?php if (!isset($_SESSION['Doctor_ID'])) { ?>
-            <div>
-                <?php if ($result) {
-                    echo '              
-                <div class="request-display" id="request-display">';
-
-                    $statusClass = "status-" . strtolower($request['status']);
-                    echo "<div class='request-item'>";
-                    echo "<div class='request-details'>";
-                    echo "<h3>Request #" . htmlspecialchars($request['requestid']) . "</h3>";
-                    echo "<p><strong>Name:</strong> " . htmlspecialchars($request['fullname']) . "</p>";
-                    echo "<p><strong>Email:</strong> " . htmlspecialchars($request['Email']) . "</p>";
-                    echo "<p><strong>Phone Number:</strong> " . htmlspecialchars($request['phoneNum']) . "</p>";
-                    echo "<p><strong>Speciality:</strong> " . htmlspecialchars($request['speciality_Name']) . "</p>";
-                    echo "<p><strong>Experience:</strong> " . htmlspecialchars($request['experience']) . " years</p>";
-                    echo "<p><strong>Status:</strong> <span class='" . $statusClass . "'>" . htmlspecialchars($request['status']) . "</span></p>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
 
 
+        <div class="appointment-summary">
+            <h2>Appointment Summary</h2>
+            <!-- <div class="appointment-filters">
+                <label for="sort-by">Sort by:</label>
+                <select id="sort-by">
+                    <option value="date">Date</option>
+                    <option value="status">Status</option>
+                </select>
+            </div> -->
+            <div class="appointment-list">
+                <div class="appointment-cards">
+                    <?php
+                    usort($events, function ($a, $b) {
+                        $dateA = strtotime($a['appointment_date']);
+                        $dateB = strtotime($b['appointment_date']);
+                        return $dateA - $dateB;
+                    });
 
-                } else { ?>
-                    <div class="form-container" id="form-container">
-                        <h2>Apply to join us as a doctor</h2>
-                        <input type="hidden" name="id" value="$_SESSION['Patient_ID']">
-                        <form action="includes/process_request.php" method="POST" id="specialtyForm"
-                            enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="specialty">Choose a Specialty:</label>
-                                <select name="specialty" id="specialty" required>
-                                    <option value="">Select a specialty...</option>
-                                    <?php foreach ($specialties as $specialty): ?>
-                                        <option value="<?php echo htmlspecialchars($specialty["speciality_id"]); ?>">
-                                            <?php echo htmlspecialchars($specialty["speciality_Name"]); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <label> Years of experience </label>
-                                <input type="number" name="experience" required>
-                                Upload your CV(PDF).
-                                <input type="file" name="pdfFile" accept=".pdf" required>
-                            </div>
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div>
+                    foreach ($events as $appointment) {
+                        $status = $appointment['status'];
+                        $statusClass = '';
+                        if ($status == 'Completed') {
+                            $statusClass = 'completed';
+                        } elseif ($status == 'Scheduled' || $status == 'In Progress') {
+                            $statusClass = 'in-progress';
+                        } else {
+                            $statusClass = 'pending';
+                        }
+                        echo '<div class="appointment-card ' . $statusClass . '">';
+                        echo '<h3>' . htmlspecialchars($appointment['name']) . '</h3>';
+                        echo '<p>Date: ' . htmlspecialchars(date('Y-m-d', strtotime($appointment['appointment_date']))) . '</p>';
+                        echo '<p>Time: ' . htmlspecialchars($appointment['startTime']) . ' - ' . htmlspecialchars($appointment['endTime']) . '</p>';
+                        echo '<p>Doctor: ' . htmlspecialchars($appointment['doctor']) . '</p>';
+                        echo '<p>Location: ' . htmlspecialchars($appointment['location']) . '</p>';
+                        echo '<p>Note: ' . htmlspecialchars($appointment['note']) . '</p>';
+                        echo '<div class="appointment-status">';
+                        echo '<span class="status-label">' . htmlspecialchars($status) . '</span>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                    ?>
                 </div>
-            <?php }
-        } ?>
-
-
+                <div class="pagination">
+                    <button class="prev-btn"><i class='bx bx-chevron-left'></i></button>
+                    <button class="next-btn"><i class='bx bx-chevron-right'></i></button>
+                </div>
+            </div>
+        </div>
         <div class="calendar-wrapper">
 
             <div class="fixed-header">
@@ -350,17 +349,8 @@ print_r($_SESSION)
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
 
-        document.getElementById('specialtyForm').addEventListener('submit', function (e) {
-            const specialty = document.getElementById('specialty').value;
-            if (!specialty) {
-                e.preventDefault();
-                alert('Please select a specialty');
-            }
-        });
-    </script>
-
-    =======
     console.log(eventsJson);
+
     </script>
     <script type="module" src="./js/schedule.js"> </script>
 
