@@ -71,7 +71,7 @@
             if (!isset($_SESSION['user_session_id'])) {
                 echo '
             <a href="signin_up.php"><button class="register-btn">Register</button></a>';
-=======
+            }
             if (!isset($_SESSION['login_user_id'])) {
                 echo '<a href="signin_up.php"><button class="register-btn">Register</button></a>';
 

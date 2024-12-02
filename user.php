@@ -59,9 +59,7 @@ try {
     $request = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    if (!isset($_SESSION['Patient_ID'])) {
-        header('Location:404.php');
-    }
+
 
 
 
@@ -84,7 +82,7 @@ $eventsJson = json_encode($events);
 $records = getrecords($pdo, $userId);
 $recordsJson = json_encode($records);
 print_r($_SESSION)
-?>
+    ?>
 
 
 <!DOCTYPE html>
@@ -302,7 +300,6 @@ print_r($_SESSION)
 
                 <label for="appointment-date">Appointment Date:</label>
                 <input type="date" id="appointment-date" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>"
-
                     name="appointment_date" required>
 
                 <label for="appointment-start">Start Time:</label>
@@ -362,8 +359,8 @@ print_r($_SESSION)
         });
     </script>
 
-=======
-        console.log(eventsJson);
+    =======
+    console.log(eventsJson);
     </script>
     <script type="module" src="./js/schedule.js"> </script>
 

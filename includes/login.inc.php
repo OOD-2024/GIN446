@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $result = get_doctor($pdo, $Email, $pwd);
 
-        if (is_doctor($result)) {
+        if (is_doctor($pdo, $result['ID'])) {
 
             //go to doctor page
             $_SESSION["Doctor_ID"] = true;
@@ -39,18 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $result = get_patient($pdo, $Email, $pwd);
 
-            if (is_patient($result)) {
-
-                //got to patient page
-
-        $result = get_patient($pdo, $Email, $pwd);
 
 
-
-        if ($result == false) {
-            $errors["errors_login"] = "Inavalid Info";
+            if ($result == false) {
+                $errors["errors_login"] = "Inavalid Info";
+            }
         }
-
         if ($errors) {
             $_SESSION["errors_login"] = $errors;
 
