@@ -48,7 +48,6 @@ require_once 'includes/user_model.inc.php';
                     <button id="accept-btn">I Understand </button>
                     <button id="decline-btn">Leave Website</button>
 
-                    <?php $_SESSION['first_time'] = true; ?>
 
                     <script>
                         window.onload = function() {
@@ -66,8 +65,8 @@ require_once 'includes/user_model.inc.php';
                         };
                     </script>
                 </div>
-            <?php endif; ?>
             </div>
+        <?php endif; ?>
         </div>
         <nav>
             <div class="logo">Cinlic</div>
@@ -77,32 +76,25 @@ require_once 'includes/user_model.inc.php';
                 <a href="about.php">About</a>
             </div>
 
-            <ul id="drop" class="navdrop">
-                <li>
-                    <div class="profile-avatar">
-                        <?php
-                        if (!isset($_SESSION['login_user_id'])) {
-                            echo ' <div class="profile-avatar" style="font-size:1.2rem">Guest</div>';
-                        } else {
+            <?php if (!isset($_SESSION['login_user_id'])) : ?>
+                <a href="signin_up.php"><button class="register-btn">Register</button></a>
+            <?php else : ?>
+                <ul id="drop" class="navdrop">
+                    <li>
+                        <div class="profile-avatar">
+                            <?php
                             $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
                             echo strtoupper(substr($user['First_Name'], 0, 1));
                             echo strtoupper(substr($user['Last_Name'], 0, 1));
-                        }
-                        ?>
-                    </div>
-
-                    <ul class="dropdown">
-                        <?php
-                        if (!isset($_SESSION['login_user_id'])) {
-                            echo '<li><a href="signin_up.php"><button class="register-btn">Register</button></a></li>';
-                        } else {
-                            echo '<li><a href="user.php"><button class="register-btn">Profile</button></a></li>
-                                <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>';
-                        }
-                        ?>
-                    </ul>
-                </li>
-            </ul>
+                            ?>
+                        </div>
+                        <ul class="dropdown">
+                            <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
+                            <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            <?php endif; ?>
         </nav>
 
         <div class="hero">

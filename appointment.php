@@ -51,39 +51,33 @@ print_r($_SESSION);
 </head>
 
 <body>
-    <nav style="position:relative;">
+    <nav>
         <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
             <a href="search.php">Services</a>
             <a href="about.php">About</a>
         </div>
-        <ul id="drop" class="navdrop">
+
+        <?php if (!isset($_SESSION['login_user_id'])) : ?>
+            <a href="signin_up.php"><button class="register-btn">Register</button></a>
+        <?php else : ?>
+            <ul id="drop" class="navdrop">
                 <li>
                     <div class="profile-avatar">
-                    <?php
-                        if (!isset($_SESSION['login_user_id'])) {
-                            echo 'Guest';
-                        } else {
-                            $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
-                            echo strtoupper(substr($user['First_Name'], 0, 1));
-                              echo strtoupper(substr($user['Last_Name'], 0, 1));
-                        }
+                        <?php
+                        $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
+                        echo strtoupper(substr($user['First_Name'], 0, 1));
+                        echo strtoupper(substr($user['Last_Name'], 0, 1));
                         ?>
                     </div>
-                    
                     <ul class="dropdown">
-                        <?php
-                        if (!isset($_SESSION['login_user_id'])) {
-                            echo '<li><a href="signin_up.php"><button class="register-btn">Register</button></a></li>';
-                        } else {
-                            echo '<li><a href="user.php"><button class="register-btn">Profile</button></a></li>
-                                <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>';
-                        }
-                        ?>
+                        <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
+                        <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
                     </ul>
                 </li>
             </ul>
+        <?php endif; ?>
     </nav>
     <?php if (isset($_SESSION['login_user_id'])) echo "<div id='login_id' hidden>" . $_SESSION['login_user_id'] . "</div>" ?>
 
