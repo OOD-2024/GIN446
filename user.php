@@ -11,19 +11,24 @@ try {
 
 try {
     require_once 'includes/config_session.inc.php';
-    // $userId = isset($_SESSION['login_user_id']) ? (int) $_SESSION['login_user_id'] : -1;
-    $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    if ($userId === false || $userId === null) {
-        header('HTTP/1.1 403 Forbidden');
-        exit('Invalid user ID');
+    if (!isset($_SESSION['login_user_id'])) {
+        http_response_code(403);
+        die();
     }
+    $userId = $_SESSION['login_user_id'];
+    $is_doctor = isset($_SESSION['Doctor_ID']);
+    // $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    // if ($userId === false || $userId === null) {
+    //     header('HTTP/1.1 403 Forbidden');
+    //     exit('Invalid user ID');
+    // }
     // echo $userId;
     require_once 'includes/user_model.inc.php';
     $user = getPatient_from_id($pdo, $userId);
     $locations = getDoctorLocations($pdo, $userId);
 
     if (!$user) {
-        header("404.php");
+        http_response_code(403);
         exit();
     }
 } catch (PDOException $e) {
@@ -44,7 +49,7 @@ $events = getAllAppointmentEvents($pdo, $userId);
 $eventsJson = json_encode($events);
 $records = getrecords($pdo, $userId);
 $recordsJson = json_encode($records);
-// print_r($_SESSION)
+print_r($_SESSION)
 ?>
 
 
@@ -87,7 +92,7 @@ $recordsJson = json_encode($records);
             margin-bottom: 5px;
         }
 
-        .accept-button {
+        #book-event {
             display: none;
         }
     </style>
@@ -97,7 +102,7 @@ $recordsJson = json_encode($records);
 
 <body>
     <nav>
-        <div class="logo">Clinic.io</div>
+        <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
             <a href="search.php">Services</a>
@@ -170,7 +175,10 @@ $recordsJson = json_encode($records);
             <div class="fixed-header">
                 <h1 class="current-month"></h1>
                 <div class="calendar" id="calendar-header"></div>
-                <button id="add-event-btn"><i class="bx bx-plus"></i></button>
+
+                <?php if ($is_doctor): ?>
+                    <button id="add-event-btn"><i class="bx bx-plus"></i></button>
+                <?php endif; ?>
 
             </div>
             <div class="calendar-container">
@@ -178,51 +186,53 @@ $recordsJson = json_encode($records);
             </div>
 
         </div>
-        <form id="add-event-form" style="display: none">
-            <h2>Schedule New Appointment</h2>
-            <input type="hidden" id="doctor-id" name="doctor_id" value="<?php echo $userId; ?>">
-            <input type="hidden" id="doctor-id" name="patient_id" value="<?php echo $userId; ?>">
+        <?php if ($is_doctor): ?>
+            <form id="add-event-form" style="display: none">
+                <h2>Schedule New Appointment</h2>
+                <input type="hidden" id="doctor-id" name="doctor_id" value="<?php echo $userId; ?>">
+                <input type="hidden" id="doctor-id" name="patient_id" value="<?php echo $userId; ?>">
 
-            <label for="appointment-date">Appointment Date:</label>
-            <input type="date" id="appointment-date" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>"
+                <label for="appointment-date">Appointment Date:</label>
+                <input type="date" id="appointment-date" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>"
 
-                name="appointment_date" required>
+                    name="appointment_date" required>
 
-            <label for="appointment-start">Start Time:</label>
-            <input type="time" id="appointment-start" name="start_time" required>
+                <label for="appointment-start">Start Time:</label>
+                <input type="time" id="appointment-start" name="start_time" required>
 
-            <label for="appointment-end">End Time:</label>
-            <input type="time" id="appointment-end" name="end_time" required>
+                <label for="appointment-end">End Time:</label>
+                <input type="time" id="appointment-end" name="end_time" required>
 
-            <label for="location">Location:</label>
+                <label for="location">Location:</label>
 
-            <select id="location" name="location_id" required>
-                <option value="">Select Location</option>
-                <?php
-                if (empty($locations)) {
-                    echo "<option value=''>No locations available</option>";
-                    return;
-                }
+                <select id="location" name="location_id" required>
+                    <option value="">Select Location</option>
+                    <?php
+                    if (empty($locations)) {
+                        echo "<option value=''>No locations available</option>";
+                        return;
+                    }
 
-                foreach ($locations as $row) {
-                    $location_description = implode(", ", array_filter([
-                        $row['Building'],
-                        $row['Street'],
-                        $row['City'],
-                        $row['Country']
-                    ]));
-                    echo "<option value='" . htmlspecialchars($row['ID']) . "'>" .
-                        htmlspecialchars($location_description) . "</option>";
-                }
+                    foreach ($locations as $row) {
+                        $location_description = implode(", ", array_filter([
+                            $row['Building'],
+                            $row['Street'],
+                            $row['City'],
+                            $row['Country']
+                        ]));
+                        echo "<option value='" . htmlspecialchars($row['ID']) . "'>" .
+                            htmlspecialchars($location_description) . "</option>";
+                    }
 
-                ?>
-            </select>
+                    ?>
+                </select>
 
-            <div class="form-buttons">
-                <button type="button" id="cancel-add-event">Cancel</button>
-                <button type="submit">Schedule Appointment</button>
-            </div>
-        </form>
+                <div class="form-buttons">
+                    <button type="button" id="cancel-add-event">Cancel</button>
+                    <button type="submit">Schedule Appointment</button>
+                </div>
+            </form>
+        <?php endif; ?>
     </main>
 
 
@@ -232,9 +242,9 @@ $recordsJson = json_encode($records);
     </footer>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
+        console.log(eventsJson);
     </script>
-    <script type="module" src="/js/schedule.js"> </script>
-    <!-- <script type="module" src="/js/events.js"> </script> -->
+    <script type="module" src="./js/schedule.js"> </script>
 </body>
 
 </html>

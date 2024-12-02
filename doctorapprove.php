@@ -7,6 +7,8 @@ require_once 'includes/dbh.inc.php';
 <html>
 
 <head>
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
+
     <style>
         .request-list {
             max-width: 800px;
@@ -114,7 +116,6 @@ require_once 'includes/dbh.inc.php';
                 echo "<button type='submit' class='reject-btn'>Reject</button>";
                 echo "</form>";
                 echo "</div>";
-
             }
         }
         echo "</div>";

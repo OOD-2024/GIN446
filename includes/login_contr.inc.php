@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 require_once 'signup_controller.inc.php';
 
@@ -12,41 +13,12 @@ function is_empty_inputL($Email, $pwd)
     }
 }
 
-function is_email_wrong(bool|array $result)
+
+function is_doctor($pdo, $id)
 {
-    if (!$result) {
-        return true;
-    } else {
+    if (!$pdo || empty($id)) {
         return false;
     }
+
+    return check_doctor($pdo, $id);
 }
-
-function is_doctor(bool|array $result)
-{
-    if (!$result) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function is_patient(bool|array $result)
-{
-    if (!$result) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function is_password_wrong(string $pwd, string $resultpwd)
-{
-
-    if (!$pwd === $resultpwd) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
