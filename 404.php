@@ -119,48 +119,51 @@
         flex-direction: column;
       }
     }
+
+    .mg-bottom-42px {
+      max-height: 600px;
+    }
   </style>
 </head>
 
 <body>
   <div class="card not-found">
     <div class="utility-page-content w-form">
-      <h1
-        style="
+      <h1 style="
             transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
               rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
             opacity: 1;
             transform-style: preserve-3d;
-          "
-        class="display-1">
+          " class="display-1">
         Venn of a <span class="title-accent v3">404</span>
       </h1>
       <div class="mg-bottom-42px">
-        <div class="inner-container not-found-main-image">
-          <div class="image-wrapper">
-            <img
-              src="https://cdn.prod.website-files.com/66f568bcf43078836f8a9bf8/6729846f7f6587d3dc48c0dd_404.png"
-              loading="eager"
-              style="
-                  transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1)
-                    rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
-                  opacity: 1;
-                  transform-style: preserve-3d;
-                "
-              alt="Venn diagram of a 404 page"
-              class="image cover" />
-          </div>
-        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+          <!-- First circle -->
+          <circle cx="90" cy="100" r="90" fill="#4682B4" opacity="0.6" />
+
+          <!-- Second circle -->
+          <circle cx="200" cy="100" r="90" fill="#ff6b6b" opacity="0.6" />
+
+          <!-- Text for left circle (We broke something) -->
+          <text x="70" y="100" fill="black" text-anchor="middle" font-size="14">We broke</text>
+          <text x="70" y="120" fill="black" text-anchor="middle" font-size="14">something</text>
+
+          <!-- Text for right circle (You can't type) -->
+          <text x="230" y="100" fill="black" text-anchor="middle" font-size="14">You can't</text>
+          <text x="230" y="120" fill="black" text-anchor="middle" font-size="14">type</text>
+
+          <!-- Text for intersection (404 page) -->
+          <text x="150" y="100" fill="black" text-anchor="middle" font-size="14">404 page</text>
+        </svg>
       </div>
       <div class="inner-container _400px---mbl center _100---mbp">
-        <h2
-          style="
+        <h2 style="
               transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1)
                 rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
               opacity: 1;
               transform-style: preserve-3d;
-            "
-          class="display-3 mg-bottom-48px">
+            " class="display-3 mg-bottom-48px">
           The Venn Diagram
         </h2>
         <p class="paragraph-2">
@@ -171,14 +174,12 @@
           set theory, probability, logic, statistics, computer science, and
           trying to visit web pages that don't exist.
         </p>
-        <div
-          style="
+        <div style="
               transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1)
                 rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
               opacity: 1;
               transform-style: preserve-3d;
-            "
-          class="buttons-row center">
+            " class="buttons-row center">
           <a href="/" class="btn-primary w-button">Go back home </a>
         </div>
       </div>
