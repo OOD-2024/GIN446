@@ -60,42 +60,12 @@ print_r($_SESSION)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/user.css ">
+    <link rel="stylesheet" href="css/user.css">
+    <link rel="stylesheet" href="css/appointment_summary.css">
     <link rel="stylesheet" href="css/schedule.css">
     <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <style>
-        .diagnosis-list {
-            width: 100%;
-            max-width: 600px;
-            padding-left: 22%;
-            font-family: Arial, sans-serif;
-            height: 340px;
-            overflow: auto;
-
-
-        }
-
-        .diagnosis-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            background-color: #f5f5f5;
-            border-left: 4px solid #2196f3;
-            border-radius: 4px;
-        }
-
-
-        .diagnosis-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        #book-event {
-            display: none;
-        }
-    </style>
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
 
 </head>
@@ -170,6 +140,55 @@ print_r($_SESSION)
         }
         ?>
         </div>
+
+        <div class="appointment-summary">
+            <h2>Appointment Summary</h2>
+            <!-- <div class="appointment-filters">
+                <label for="sort-by">Sort by:</label>
+                <select id="sort-by">
+                    <option value="date">Date</option>
+                    <option value="status">Status</option>
+                </select>
+            </div> -->
+            <div class="appointment-list">
+                <div class="appointment-cards">
+                    <?php
+                    usort($events, function ($a, $b) {
+                        $dateA = strtotime($a['appointment_date']);
+                        $dateB = strtotime($b['appointment_date']);
+                        return $dateA - $dateB;
+                    });
+
+                    foreach ($events as $appointment) {
+                        $status = $appointment['status'];
+                        $statusClass = '';
+                        if ($status == 'Completed') {
+                            $statusClass = 'completed';
+                        } elseif ($status == 'Scheduled' || $status == 'In Progress') {
+                            $statusClass = 'in-progress';
+                        } else {
+                            $statusClass = 'pending';
+                        }
+                        echo '<div class="appointment-card ' . $statusClass . '">';
+                        echo '<h3>' . htmlspecialchars($appointment['name']) . '</h3>';
+                        echo '<p>Date: ' . htmlspecialchars(date('Y-m-d', strtotime($appointment['appointment_date']))) . '</p>';
+                        echo '<p>Time: ' . htmlspecialchars($appointment['startTime']) . ' - ' . htmlspecialchars($appointment['endTime']) . '</p>';
+                        echo '<p>Doctor: ' . htmlspecialchars($appointment['doctor']) . '</p>';
+                        echo '<p>Location: ' . htmlspecialchars($appointment['location']) . '</p>';
+                        echo '<p>Note: ' . htmlspecialchars($appointment['note']) . '</p>';
+                        echo '<div class="appointment-status">';
+                        echo '<span class="status-label">' . htmlspecialchars($status) . '</span>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                    ?>
+                </div>
+                <div class="pagination">
+                    <button class="prev-btn"><i class='bx bx-chevron-left'></i></button>
+                    <button class="next-btn"><i class='bx bx-chevron-right'></i></button>
+                </div>
+            </div>
+        </div>
         <div class="calendar-wrapper">
 
             <div class="fixed-header">
@@ -242,7 +261,6 @@ print_r($_SESSION)
     </footer>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
-        console.log(eventsJson);
     </script>
     <script type="module" src="./js/schedule.js"> </script>
 </body>

@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   dropdownItems.forEach((item) => {
     item.addEventListener("click", function () {
-      input.value = this.textContent;
+      input.value = this.textContent.trimStart().trimEnd();
       dropdown.style.display = "none";
     });
   });

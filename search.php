@@ -3,6 +3,11 @@ require_once 'includes/dbh.inc.php';
 try {
     $db = Database::getInstance();
     $pdo = $db->getConnection();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $specialty_query = "SELECT speciality_Name FROM specialties ORDER BY speciality_Name";
+    $stmt = $pdo->prepare($specialty_query);
+    $stmt->execute();
+    $specialties = $stmt->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
@@ -77,10 +82,7 @@ function h($str)
                         <label>Doctor Name</label>
                         <input type="text" name="name" value="<?= h($_GET['name'] ?? '') ?>">
                     </div>
-                    <!-- <div class="search-field">
-                        <label>Specialty</label>
-                        <input type="text" name="specialty" value="<?= h($_GET['specialty'] ?? '') ?>">
-                    </div> -->
+
                     <div class="search-field">
                         <label>Specialty</label>
                         <div class="custom-select">
@@ -107,7 +109,8 @@ function h($str)
                 </div>
                 <div class="button-group">
                     <button type="submit" class="search-btn">Search</button>
-                    <a href="<?= h($_SERVER['PHP_SELF']) ?>" class="reset-btn">Reset</a>
+                    <a href="<?= h($_SERVER['PHP_SELF']) ?>" class="reset-btn" style="text-decoration: none; ">Reset</a>
+
                 </div>
             </form>
         </div>
