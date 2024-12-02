@@ -83,6 +83,16 @@ CREATE TABLE IF NOT EXISTS rejected_appointments (
     FOREIGN KEY (AppointmentID) REFERENCES appointment(AppointmentID) ON DELETE CASCADE
 );
 
+CREATE TABLE CV_PDF (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id int not null , 
+    filename VARCHAR(255) NOT NULL,
+    filepath VARCHAR(255) NOT NULL,
+    upload_date DATETIME NOT NULL, 
+    constraint FK_PID foreign key  (patient_id)  references patient (ID)  
+);
+=======
+
 create table requests (
 	requestid int  primary key auto_increment , 
     patient_id int not null, 
