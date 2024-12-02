@@ -42,9 +42,9 @@ try {
         <?= isset($doctor) ? "Appointments - Dr. " . h($doctor['First_Name']) . " " . h($doctor['Last_Name']) : "Appointments" ?>
     </title>
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="/css/schedule.css">
-    <link rel="stylesheet" href="/css/appointment.css">
-    <link rel="shortcut icon" href="/public/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/schedule.css">
+    <link rel="stylesheet" href="css/appointment.css">
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
@@ -65,7 +65,7 @@ try {
         </div>
     <?php else: ?>
         <div class="doctor-info">
-            <h2>Dr. <?= h($doctor['First_Name']) ?> <?= h($doctor['Last_Name']) ?></h2>
+            <h2>Dr. <?= h($doctor['First_Name']) ?>     <?= h($doctor['Last_Name']) ?></h2>
             <p>Specialties: <?= h($doctor['specialties']) ?></p>
         </div>
 

@@ -11,7 +11,7 @@ try {
 
 try {
     require_once 'includes/config_session.inc.php';
-    $userId = isset($_SESSION['login_user_id']) ? (int) $_SESSION['login_user_id'] : -1;
+    $userId = isset($_SESSION['login_user_id']) ? $_SESSION['login_user_id'] : -1;
     // $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     if ($userId === false || $userId === null) {
         header('HTTP/1.1 403 Forbidden');
@@ -26,6 +26,30 @@ try {
         header("404.php");
         exit();
     }
+
+
+    $stmt = $pdo->prepare("SELECT speciality_id, speciality_Name FROM specialties ORDER BY speciality_Name");
+    $stmt->execute();
+    $specialties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    $stmt = $pdo->prepare("Select * from requests where patient_id = :pid");
+    $stmt->bindParam(":pid", $_SESSION['login_user_id']);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id and patient_id = :id;');
+    $stmt->bindParam(":id", $_SESSION["login_user_id"]);
+    $stmt->execute();
+    $request = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+    if (!isset($_SESSION['Patient_ID'])) {
+        header('Location:404.php');
+    }
+
+
+
 } catch (PDOException $e) {
     die("Query failed: " . $e->getMessage());
 }
@@ -64,9 +88,9 @@ $recordsJson = json_encode($records);
         .diagnosis-list {
             width: 100%;
             max-width: 600px;
-            padding-left: 22%;
+            padding-left: 25%;
             font-family: Arial, sans-serif;
-            height: 340px;
+            height: auto;
             overflow: auto;
 
 
@@ -91,75 +115,171 @@ $recordsJson = json_encode($records);
             display: none;
         }
 
-        .form-container {
+        .request-display {
             background-color: white;
-            padding-left: 22%;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px;
+            max-width: 700px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
-            padding-left: ;
         }
 
-        label {
+        .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #4a5568;
-            font-weight: 500;
+            font-weight: 600;
+            color: #333;
         }
 
-        select {
+        select,
+        input[type="number"] {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
             font-size: 1rem;
-            color: #2d3748;
-            background-color: #fff;
-            cursor: pointer;
-            transition: all 0.2s;
         }
 
-        select:hover {
-            border-color: #cbd5e0;
-        }
-
-        select:focus {
+        select:focus,
+        input:focus {
             outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
         }
 
-        button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #4299e1;
+        button[type="submit"] {
+            background-color: #4a90e2;
             color: white;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 1rem;
             transition: background-color 0.2s;
         }
 
-        button:hover {
-            background-color: #3182ce;
-        }
-
-        button:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.4);
+        button[type="submit"]:hover {
+            background-color: #357abd;
         }
 
         .error-message {
-            color: #e53e3e;
+            color: #dc3545;
             font-size: 0.875rem;
-            margin-top: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        input:invalid {
+            border-color: #dc3545;
+        }
+
+        .request-display {
+            max-width: 800px;
+            margin: 24px auto;
+            padding: 20px;
+        }
+
+        /* Request Item Card */
+        .request-item {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            margin-bottom: 20px;
+
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .request-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .request-details h3 {
+            color: #2d3748;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f7f7f7;
+        }
+
+        .request-details p {
+            margin: 12px 0;
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .request-details strong {
+            color: #2d3748;
+            font-weight: 600;
+            min-width: 120px;
+            display: inline-block;
+        }
+
+        /* Status Styles */
+        [class^="status-"] {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background-color: #fff8e6;
+            color: #b7791f;
+        }
+
+        .status-approved {
+            background-color: #e6ffee;
+            color: #047857;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        input[type="file"] {
+            /* Reset default styles */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            /* Container styling */
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+
+            /* Text styling */
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+
+            /* Hover state */
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            background-color: #eee;
+            border-color: #999;
         }
     </style>
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
@@ -240,26 +360,57 @@ $recordsJson = json_encode($records);
         }
         ?>
         </div>
-        <div class="form-container">
-            <h2>Select Medical Specialty</h2>
-            <input type="hidden" name="id" value="<?php $_SESSION['Patient_ID'] ?>">
-            <form action="includes/process_request.php" method="POST" id="specialtyForm">
-                <div class="form-group">
-                    <label for="specialty">Choose a Specialty:</label>
-                    <select name="specialty" id="specialty" required>
-                        <option value="">Select a specialty...</option>
-                        <?php foreach ($specialties as $specialty): ?>
-                            <option value="<?php echo htmlspecialchars($specialty['speciality_id']); ?>">
-                                <?php echo htmlspecialchars($specialty['speciality_Name']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <label> Years of experience </label>
-                    <input type="number" name="experience">
+        <?php if (!isset($_SESSION['Doctor_ID'])) { ?>
+            <div>
+                <?php if ($result) {
+                    echo '              
+                <div class="request-display" id="request-display">';
+
+                    $statusClass = "status-" . strtolower($request['status']);
+                    echo "<div class='request-item'>";
+                    echo "<div class='request-details'>";
+                    echo "<h3>Request #" . htmlspecialchars($request['requestid']) . "</h3>";
+                    echo "<p><strong>Name:</strong> " . htmlspecialchars($request['fullname']) . "</p>";
+                    echo "<p><strong>Email:</strong> " . htmlspecialchars($request['Email']) . "</p>";
+                    echo "<p><strong>Phone Number:</strong> " . htmlspecialchars($request['phoneNum']) . "</p>";
+                    echo "<p><strong>Speciality:</strong> " . htmlspecialchars($request['speciality_Name']) . "</p>";
+                    echo "<p><strong>Experience:</strong> " . htmlspecialchars($request['experience']) . " years</p>";
+                    echo "<p><strong>Status:</strong> <span class='" . $statusClass . "'>" . htmlspecialchars($request['status']) . "</span></p>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+
+
+
+                } else { ?>
+                    <div class="form-container" id="form-container">
+                        <h2>Apply to join us as a doctor</h2>
+                        <input type="hidden" name="id" value="$_SESSION['Patient_ID']">
+                        <form action="includes/process_request.php" method="POST" id="specialtyForm"
+                            enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="specialty">Choose a Specialty:</label>
+                                <select name="specialty" id="specialty" required>
+                                    <option value="">Select a specialty...</option>
+                                    <?php foreach ($specialties as $specialty): ?>
+                                        <option value="<?php echo htmlspecialchars($specialty["speciality_id"]); ?>">
+                                            <?php echo htmlspecialchars($specialty["speciality_Name"]); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label> Years of experience </label>
+                                <input type="number" name="experience" required>
+                                Upload your CV(PDF).
+                                <input type="file" name="pdfFile" accept=".pdf" required>
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
                 </div>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+            <?php }
+        } ?>
+
 
         <div class="calendar-wrapper">
 
@@ -328,11 +479,18 @@ $recordsJson = json_encode($records);
     <footer>
         &copy; 2024 clinic.io. All rights reserved.
     </footer>
+    <script type="module" src="js/schedule.js"> </script>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
+        document.getElementById('specialtyForm').addEventListener('submit', function (e) {
+            const specialty = document.getElementById('specialty').value;
+            if (!specialty) {
+                e.preventDefault();
+                alert('Please select a specialty');
+            }
+        });
     </script>
-    <script type="module" src="/js/schedule.js"> </script>
-    <!-- <script type="module" src="/js/events.js"> </script> -->
+
 </body>
 
 </html>

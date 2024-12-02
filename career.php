@@ -127,6 +127,58 @@ try {
             font-size: 0.875rem;
             margin-top: 0.5rem;
         }
+
+        .request-list {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .request-item {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .request-details {
+            margin-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .accept-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .reject-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .status-pending {
+            color: #ff9800;
+        }
+
+        .status-accepted {
+            color: #4CAF50;
+        }
+
+        .status-rejected {
+            color: #f44336;
+        }
     </style>
 </head>
 

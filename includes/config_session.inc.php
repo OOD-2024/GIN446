@@ -16,7 +16,6 @@ session_start();
 
 
 if (!isset($_SESSION["last_regeneration"])) {
-    $_SESSION["guest_id"] = session_create_id();
     regenerateSessionId();
 
 } else {
