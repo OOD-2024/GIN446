@@ -8,5 +8,5 @@ session_start();
 if ($first_time !== null) {
     $_SESSION['first_time'] = $first_time;
 }
-header("Location:index.php");
+header("Location: index.php");
 exit();

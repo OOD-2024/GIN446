@@ -129,48 +129,41 @@ print_r($_SESSION)
 </head>
 
 <body>
-    <nav style="position:relative;">
+    <nav>
         <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
             <a href="search.php">Services</a>
             <a href="about.php">About</a>
         </div>
-        <ul id="drop" class="navdrop">
+
+        <?php if (!isset($_SESSION['login_user_id'])) : ?>
+            <a href="signin_up.php"><button class="register-btn">Register</button></a>
+        <?php else : ?>
+            <ul id="drop" class="navdrop">
                 <li>
                     <div class="profile-avatar">
-                    <?php
-                        if (!isset($_SESSION['login_user_id'])) {
-                            echo 'Guest';
-                        } else {
-                            $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
-                            echo strtoupper(substr($user['First_Name'], 0, 1));
-                              echo strtoupper(substr($user['Last_Name'], 0, 1));
-                        }
+                        <?php
+                        $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
+                        echo strtoupper(substr($user['First_Name'], 0, 1));
+                        echo strtoupper(substr($user['Last_Name'], 0, 1));
                         ?>
                     </div>
-                    
                     <ul class="dropdown">
-                        <?php
-                        if (!isset($_SESSION['login_user_id'])) {
-                            echo '<li><a href="signin_up.php"><button class="register-btn">Register</button></a></li>';
-                        } else {
-                            echo '<li><a href="user.php" class="active"><button class="register-btn">Profile</button></a></li>
-                                <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>';
-                        }
-                        ?>
+                        <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
+                        <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
                     </ul>
                 </li>
             </ul>
+        <?php endif; ?>
     </nav>
-
     <main>
 
         <div class="profile-container">
             <div class="profile-header">
                 <div id="profile-avatar">
                     <?php echo strtoupper(substr($user['First_Name'], 0, 1));
-                          echo strtoupper(substr($user['Last_Name'], 0, 1)); ?>
+                    echo strtoupper(substr($user['Last_Name'], 0, 1)); ?>
                 </div>
                 <div class="profile-info">
                     <h1 class="profile-name">
@@ -207,7 +200,7 @@ print_r($_SESSION)
                 </div>
             </div>
         </div>
-          <?php
+        <?php
         if ($records) {
             echo '<div class="diagnosis-list">
             <h2>Diagnosis List</h2>';
@@ -223,8 +216,7 @@ print_r($_SESSION)
             echo '</div>';
         } else {
             echo '<div class="diagnosis-list">
-            <h2>Diagnosis List</h2> <div class="diagnosis-item">You are healthy as a horse </div>'
-            ;
+            <h2>Diagnosis List</h2> <div class="diagnosis-item">You are healthy as a horse </div>';
         }
         ?>
         </div>
