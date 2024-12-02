@@ -2,6 +2,7 @@
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+
     $Email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
 
     $pwd = filter_var($_POST["pwd"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -22,35 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errors["empty_inputs"] = "Fill in all fields";
         }
         require 'config_session.inc.php';
-        $result = get_doctor($pdo, $Email, $pwd);
-
-        if (is_doctor($result)) {
-
-            //go to doctor page
-            $_SESSION["Doctor_ID"] = "Doctor" . "_" . $result['ID'];
-            // $errors["login_correct"] = "Login Successfull!";
+        $result = get_patient($pdo, $Email, $pwd);
 
 
-            // if (!is_email_wrong($result) && !is_password_wrong($pwd, $result["pwd"])) {
-            //     $errors["login_incorrect"] = "Incorrect Login info!";
-            // }
-        } else {
-            $result = get_patient($pdo, $Email, $pwd);
-
-            if (is_patient($result)) {
-
-                //got to patient page
-
-                $_SESSION["Patient_ID"] = "Patient" . "_" . $result["ID"];
-
-
-            }
-
-            // if (!is_email_wrong($result) && !is_password_wrong($pwd, $result["pwd"])) {
-            //     $errors["login_incorrect"] = "Incorrect Login info!";
-            // }
-        }
-        if (!isset($_SESSION["Doctor_ID"]) && !isset($_SESSION["Patient_ID"])) {
+        if ($result == false) {
             $errors["errors_login"] = "Inavalid Info";
         }
 
@@ -60,10 +36,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header('Location: ../signin_up.php');
             die();
         }
-        regenerate_session_id_loggedin($pdo, $Email);
-        $user_session_id = session_id();
-        setsessionid($pdo, $Email, $user_session_id);
-        $_SESSION['user_session_id'] = $user_session_id;
+        // regenerate_session_id_loggedin($pdo, $Email);
+        // $user_session_id = session_id();
+        // setsessionid($pdo, $Email, $user_session_id);
+        // $_SESSION['user_session_id'] = $user_session_id;
+
+        if (is_doctor($pdo, $result['ID'])) {
+            $_SESSION['Doctor_ID'] = true;
+        }
+
+        $_SESSION['login_user_id'] = $result['ID'];
 
 
 

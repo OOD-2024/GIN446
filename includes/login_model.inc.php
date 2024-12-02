@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 
@@ -12,6 +13,17 @@ function get_doctor(object $pdo, string $email, $pwd)
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result;
+}
+
+function check_doctor(object $pdo, $id)
+{
+    $query = "SELECT * from   doctor WHERE id = :id ";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(":id", $id);
+    $stmt->execute();
+
+    $result = $stmt->rowCount();
+    return $result > 0;
 }
 function get_patient(object $pdo, string $email, $pwd)
 {
@@ -31,5 +43,4 @@ function setsessionid($pdo, $email, $sessionId)
     $stmt = @$pdo->prepare($query);
     $stmt->bindParam(":sessionid", $sessionId);
     $stmt->bindParam(':date', date('Y-m-d H:i:s'));
-
 }

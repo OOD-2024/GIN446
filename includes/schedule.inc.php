@@ -1,5 +1,4 @@
 <?php
-// Include necessary files
 require_once 'dbh.inc.php';
 $db = Database::getInstance();
 $pdo = $db->getConnection();
@@ -14,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $doctorId = $_POST['doctor_id'];
         $patientId = $_POST['patient_id'];
 
-        // Validate the input data
         if (
             !is_string($appointmentDate) || !is_string($startTime) || !is_string($endTime) ||
             !is_numeric($locationId) || !is_numeric($doctorId) || !is_numeric($patientId)
@@ -24,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        // Check if locationID, doctorId, and patientId exist in the database
         $validationQueries = [
             'location' => "SELECT COUNT(*) FROM location WHERE ID = :id",
             'doctor' => "SELECT COUNT(*) FROM doctor WHERE ID = :id",
@@ -44,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Check for existing appointments with time conflicts
         $conflictQuery = "
             SELECT COUNT(*) FROM appointment 
             WHERE DoctorID = :doctor_id 
@@ -68,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        // Save the appointment to the database
         $query = "INSERT INTO appointment (
             DoctorID, PatientID, Appointment_Date, LocationID, 
             StartTime, EndTime, Appointment_Status
@@ -86,7 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ':end_time' => $endTime
         ]);
 
-        // Return a success response
         http_response_code(200);
         echo json_encode(['success' => true, 'message' => 'Appointment scheduled successfully']);
     } catch (PDOException $e) {
@@ -97,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
 
     try {
-        // Validate input
         if (!isset($input['appointmentId']) || !isset($input['action'])) {
             throw new Exception('Missing required parameters');
         }
@@ -105,10 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $appointmentId = $input['appointmentId'];
         $action = $input['action'];
 
-        // Start a transaction
         $pdo->beginTransaction();
 
-        // Prepare different update queries based on action
         switch ($action) {
             case 'book':
                 if (!isset($input['patientId'])) {
@@ -177,7 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 throw new Exception('Invalid action');
         }
 
-        // Check if any rows were affected
         if ($stmt->rowCount() > 0) {
             $pdo->commit();
             echo json_encode([
@@ -192,15 +182,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ]);
         }
     } catch (Exception $e) {
-        // Rollback the transaction in case of error
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
 
-        // Log the error
         error_log("Appointment update error: " . $e->getMessage());
 
-        // Send error response
         http_response_code(500);
         echo json_encode([
             'success' => false,

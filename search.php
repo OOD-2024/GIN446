@@ -59,7 +59,7 @@ function h($str)
 
 <body>
     <nav>
-        <div class="logo">Clinic.io</div>
+        <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
             <a href="#">Services</a>
@@ -77,9 +77,24 @@ function h($str)
                         <label>Doctor Name</label>
                         <input type="text" name="name" value="<?= h($_GET['name'] ?? '') ?>">
                     </div>
-                    <div class="search-field">
+                    <!-- <div class="search-field">
                         <label>Specialty</label>
                         <input type="text" name="specialty" value="<?= h($_GET['specialty'] ?? '') ?>">
+                    </div> -->
+                    <div class="search-field">
+                        <label>Specialty</label>
+                        <div class="custom-select">
+                            <input type="text" name="specialty" id="specialty-input"
+                                value="<?= h($_GET['specialty'] ?? '') ?>"
+                                autocomplete="off">
+                            <div id="specialty-dropdown" class="dropdown-list">
+                                <?php foreach ($specialties as $specialty): ?>
+                                    <div class="dropdown-item" data-value="<?= h($specialty) ?>">
+                                        <?= h($specialty) ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                     <div class="search-field">
                         <label>Country</label>
@@ -134,6 +149,7 @@ function h($str)
     <footer>
         &copy; 2024 clinic.io. All rights reserved.
     </footer>
+    <script type="module" src="js/search.js"></script>
 </body>
 
 </html>
