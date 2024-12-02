@@ -129,22 +129,48 @@ print_r($_SESSION)
 </head>
 
 <body>
-    <nav>
+    <nav style="position:relative;">
         <div class="logo">Cinlic</div>
         <div class="nav-links">
             <a href="index.php">Home</a>
             <a href="search.php">Services</a>
             <a href="about.php">About</a>
         </div>
-        <a href="logout.php"><button class="register-btn">Logout</button></a>
+        <ul id="drop" class="navdrop">
+                <li>
+                    <div class="profile-avatar">
+                    <?php
+                        if (!isset($_SESSION['login_user_id'])) {
+                            echo 'Guest';
+                        } else {
+                            $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
+                            echo strtoupper(substr($user['First_Name'], 0, 1));
+                              echo strtoupper(substr($user['Last_Name'], 0, 1));
+                        }
+                        ?>
+                    </div>
+                    
+                    <ul class="dropdown">
+                        <?php
+                        if (!isset($_SESSION['login_user_id'])) {
+                            echo '<li><a href="signin_up.php"><button class="register-btn">Register</button></a></li>';
+                        } else {
+                            echo '<li><a href="user.php" class="active"><button class="register-btn">Profile</button></a></li>
+                                <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>';
+                        }
+                        ?>
+                    </ul>
+                </li>
+            </ul>
     </nav>
 
     <main>
 
         <div class="profile-container">
             <div class="profile-header">
-                <div class="profile-avatar">
-                    <?php echo strtoupper(substr($user['First_Name'], 0, 1)); ?>
+                <div id="profile-avatar">
+                    <?php echo strtoupper(substr($user['First_Name'], 0, 1));
+                          echo strtoupper(substr($user['Last_Name'], 0, 1)); ?>
                 </div>
                 <div class="profile-info">
                     <h1 class="profile-name">
@@ -313,10 +339,6 @@ print_r($_SESSION)
     </main>
 
 
-
-    <footer>
-        &copy; 2024 clinic.io. All rights reserved.
-    </footer>
     <script>
         class ErrorNotification {
             static init() {
