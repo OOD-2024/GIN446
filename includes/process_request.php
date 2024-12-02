@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
 
-        header("Location:../user.php");
+        header("Location:../career.php");
 
     } catch (PDOException $e) {
         echo $e->getMessage();
