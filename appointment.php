@@ -93,7 +93,7 @@ print_r($_SESSION);
         </div>
     <?php else: ?>
         <div class="doctor-info">
-            <h2>Dr. <?= h($doctor['First_Name']) ?> <?= h($doctor['Last_Name']) ?></h2>
+            <h2>Dr. <?= h($doctor['First_Name']) ?>     <?= h($doctor['Last_Name']) ?></h2>
             <p>Specialties: <?= h($doctor['specialties']) ?></p>
         </div>
 

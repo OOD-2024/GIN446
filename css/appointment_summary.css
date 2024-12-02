@@ -1,0 +1,94 @@
+.appointment-summary {
+  margin-top: 2rem;
+  background-color: transparent;
+  padding: 0 4rem;
+  border-radius: 4px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
+
+.appointment-filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+}
+
+.appointment-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-left: 4px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-card.completed {
+  border-color: #4caf50;
+}
+
+.appointment-card.in-progress {
+  border-color: #ff9800;
+}
+
+.appointment-card.pending {
+  border-color: #e53935;
+}
+
+.appointment-status {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.status-label {
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.appointment-card.completed .status-label {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.appointment-card.in-progress .status-label {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.appointment-card.pending .status-label {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  background-color: transparent;
+  color: #333333;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.pagination button:hover {
+  color: #ff9999;
+}
+
+.pagination button i {
+  font-size: 1.2rem;
+}

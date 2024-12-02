@@ -1,0 +1,148 @@
+.request-list {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.request-item {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.request-details {
+    margin-bottom: 10px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.accept-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.reject-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.status-pending {
+    color: #ff9800;
+}
+
+.status-accepted {
+    color: #4CAF50;
+}
+
+.status-rejected {
+    color: #f44336;
+}
+
+.pdf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.pdf-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.pdf-card:hover {
+    transform: translateY(-5px);
+}
+
+.pdf-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    display: block;
+}
+
+.pdf-info {
+    text-align: center;
+}
+
+.pdf-name {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    word-break: break-word;
+}
+
+.pdf-date {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.pdf-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+.btn-view {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #2980b9;
+}
+
+.btn-download {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-download:hover {
+    background-color: #27ae60;
+}
+
+.no-pdfs {
+    text-align: center;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+    .request-card {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        justify-content: flex-start;
+    }
+}
