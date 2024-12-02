@@ -7,161 +7,24 @@ require_once 'includes/dbh.inc.php';
 <html>
 
 <head>
-    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
-
-    <style>
-        .request-list {
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        .request-item {
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-
-        .request-details {
-            margin-bottom: 10px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .accept-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .reject-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .status-pending {
-            color: #ff9800;
-        }
-
-        .status-accepted {
-            color: #4CAF50;
-        }
-
-        .status-rejected {
-            color: #f44336;
-        }
-
-        .pdf-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-
-        .pdf-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .pdf-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .pdf-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            display: block;
-        }
-
-        .pdf-info {
-            text-align: center;
-        }
-
-        .pdf-name {
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            word-break: break-word;
-        }
-
-        .pdf-date {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-
-        .pdf-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-view {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .btn-view:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-download {
-            background-color: #2ecc71;
-            color: white;
-        }
-
-        .btn-download:hover {
-            background-color: #27ae60;
-        }
-
-        .no-pdfs {
-            text-align: center;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        @media (max-width: 640px) {
-            .request-card {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
-                justify-content: flex-start;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/docapprove.css">
 </head>
 
 <body>
+    <nav>
+        <div class="logo">Cinlic</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="search.php">Services</a>
+            <a href="about.php">About</a>
+        </div>
+
+
+
+    </nav>
+
     <?php
     try {
         $db = Database::getInstance();
@@ -170,7 +33,6 @@ require_once 'includes/dbh.inc.php';
         $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id;');
         $stmt->execute();
         $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
         if (!$requests) {
             echo '<h1> No pending Requests</h1>';
@@ -236,28 +98,29 @@ require_once 'includes/dbh.inc.php';
                     echo "</div>"; ?>
 
 
-                <?php }
+                    <?php
 
-            // Only show buttons if status is pending
-            if (strtolower($request['status']) == 'pending') {
-                echo "<div class='button-group'>";
-                echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
-                echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
-                echo "<input type='hidden' name='action' value='accept'>";
-                echo "<button type='submit' class='accept-btn'>Accept</button>";
-                echo "</form>";
+                    // Only show buttons if status is pending
+                    if (strtolower($request['status']) == 'pending') {
+                        echo "<div class='button-group'>";
+                        echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
+                        echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
+                        echo "<input type='hidden' name='action' value='accept'>";
+                        echo "<button type='submit' class='accept-btn'>Accept</button>";
+                        echo "</form>";
 
-                echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
-                echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
-                echo "<input type='hidden' name='action' value='reject'>";
-                echo "<button type='submit' class='reject-btn'>Reject</button>";
-                echo "</form>";
-                echo "</div>";
+                        echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
+                        echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
+                        echo "<input type='hidden' name='action' value='reject'>";
+                        echo "<button type='submit' class='reject-btn'>Reject</button>";
+                        echo "</form>";
+                        echo "</div>";
+
+                    }
+
+                    echo "</div>";
             }
-
-            echo "</div>";
         }
-
     } catch (PDOException $e) {
         echo "" . $e->getMessage() . "";
     }
