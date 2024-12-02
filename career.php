@@ -13,20 +13,15 @@ try {
     $stmt->execute();
     $specialties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
     $stmt = $pdo->prepare("Select * from requests where patient_id = :pid");
     $stmt->bindParam(":pid", $_SESSION['login_user_id']);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!isset($_SESSION['Patient_ID'])) {
-        header('Location:404.php');
-    } else {
-        if ($result) {
-            $_SESSION['applied'] = 'true';
-            header('Location:index.php');
-        }
-    }
+    $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id and patient_id = :id;');
+    $stmt->bindParam(":id", $_SESSION["login_user_id"]);
+    $stmt->execute();
+    $request = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
 }
 ?>
@@ -181,27 +176,55 @@ try {
 </head>
 
 <body>
-    <div class="form-container">
-        <h2>Select Medical Specialty</h2>
-        <input type="hidden" name="id" value="<?php $_SESSION['Patient_ID'] ?>">
-        <form action="includes/process_request.php" method="POST" id="specialtyForm">
-            <div class="form-group">
-                <label for="specialty">Choose a Specialty:</label>
-                <select name="specialty" id="specialty" required>
-                    <option value="">Select a specialty...</option>
-                    <?php foreach ($specialties as $specialty): ?>
-                        <option value="<?php echo htmlspecialchars($specialty['speciality_id']); ?>">
-                            <?php echo htmlspecialchars($specialty['speciality_Name']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <label> Years of experience </label>
-                <input type="number" name="experience">
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+    <?php if (!isset($_SESSION['Doctor_ID'])) { ?>
+        <div>
+            <?php if ($result) {
+                echo '              
+                <div class="request-display" id="request-display">';
 
+                $statusClass = "status-" . strtolower($request['status']);
+                echo "<div class='request-item'>";
+                echo "<div class='request-details'>";
+                echo "<h3>Request #" . htmlspecialchars($request['requestid']) . "</h3>";
+                echo "<p><strong>Name:</strong> " . htmlspecialchars($request['fullname']) . "</p>";
+                echo "<p><strong>Email:</strong> " . htmlspecialchars($request['Email']) . "</p>";
+                echo "<p><strong>Phone Number:</strong> " . htmlspecialchars($request['phoneNum']) . "</p>";
+                echo "<p><strong>Speciality:</strong> " . htmlspecialchars($request['speciality_Name']) . "</p>";
+                echo "<p><strong>Experience:</strong> " . htmlspecialchars($request['experience']) . " years</p>";
+                echo "<p><strong>Status:</strong> <span class='" . $statusClass . "'>" . htmlspecialchars($request['status']) . "</span></p>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+
+
+
+            } else { ?>
+                <div class="form-container" id="form-container">
+                    <h2>Apply to join us as a doctor</h2>
+                    <input type="hidden" name="id" value="$_SESSION['Patient_ID']">
+                    <form action="includes/process_request.php" method="POST" id="specialtyForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="specialty">Choose a Specialty:</label>
+                            <select name="specialty" id="specialty" required>
+                                <option value="">Select a specialty...</option>
+                                <?php foreach ($specialties as $specialty): ?>
+                                    <option value="<?php echo htmlspecialchars($specialty["speciality_id"]); ?>">
+                                        <?php echo htmlspecialchars($specialty["speciality_Name"]); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label> Years of experience </label>
+                            <input type="number" name="experience" required>
+                            Upload your CV(PDF).
+                            <input type="file" name="pdfFile" accept=".pdf" required>
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        <?php }
+    } ?>
     <script>
         document.getElementById('specialtyForm').addEventListener('submit', function(e) {
             const specialty = document.getElementById('specialty').value;
