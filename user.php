@@ -207,7 +207,7 @@ print_r($_SESSION)
                 </div>
             </div>
         </div>
-        <?php
+          <?php
         if ($records) {
             echo '<div class="diagnosis-list">
             <h2>Diagnosis List</h2>';
@@ -221,9 +221,14 @@ print_r($_SESSION)
                 <div class ="diagnosis-title " >Notes: ' . $rec['Notes'] . '</div></div>';
             }
             echo '</div>';
+        } else {
+            echo '<div class="diagnosis-list">
+            <h2>Diagnosis List</h2> <div class="diagnosis-item">You are healthy as a horse </div>'
+            ;
         }
         ?>
         </div>
+
 
         <div class="appointment-summary">
             <h2>Appointment Summary</h2>
