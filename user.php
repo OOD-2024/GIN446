@@ -64,6 +64,10 @@ print_r($_SESSION)
 
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
     <style>
+        #book-event {
+            display: none;
+        }
+
         #error-notification-container {
             position: fixed;
             top: 20px;
@@ -72,7 +76,6 @@ print_r($_SESSION)
             width: 300px;
         }
 
-        /* Error Card Styles */
         .error-card {
             background-color: #ff4d4d;
             color: white;
@@ -151,10 +154,10 @@ print_r($_SESSION)
                     </div>
                     <ul class="dropdown">
                         <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
-                        <?php 
-                                if(!isset($_Session['Doctor_ID'])){
-                                   echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
-                                }
+                        <?php
+                        if (!isset($_Session['Doctor_ID'])) {
+                            echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
+                        }
                         ?>
                         <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
                     </ul>
@@ -247,14 +250,15 @@ print_r($_SESSION)
 
                     foreach ($events as $appointment) {
                         $status = $appointment['status'];
-                        $statusClass = '';
-                        if ($status == 'Completed') {
-                            $statusClass = 'completed';
-                        } elseif ($status == 'Scheduled' || $status == 'In Progress') {
-                            $statusClass = 'in-progress';
-                        } else {
-                            $statusClass = 'pending';
-                        }
+                        $statusClass = $status;
+                        // $statusClass = '';
+                        // if ($status == 'Completed') {
+                        //     $statusClass = 'completed';
+                        // } elseif ($status == 'Scheduled' || $status == 'In Progress') {
+                        //     $statusClass = 'in-progress';
+                        // } else {
+                        //     $statusClass = 'pending';
+                        // }
                         echo '<div class="appointment-card ' . $statusClass . '">';
                         echo '<h3>' . htmlspecialchars($appointment['name']) . '</h3>';
                         echo '<p>Date: ' . htmlspecialchars(date('Y-m-d', strtotime($appointment['appointment_date']))) . '</p>';
@@ -398,6 +402,7 @@ print_r($_SESSION)
     </script>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
+        console.log(eventsJson)
     </script>
     <script type="module" src="./js/schedule.js"> </script>
 </body>

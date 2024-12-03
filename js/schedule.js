@@ -86,12 +86,13 @@ function showEventDetails(event) {
         if (!document.getElementById("login_id")) {
           window.location.href =
             window.location.pathname.split("/").slice(0, -1).join("/") +
-            "/login.php";
+            "/signin_up.php";
 
           return;
         }
 
         let patient_id = document.getElementById("login_id").innerText;
+        console.log(patient_id);
         fetch("includes/schedule.inc.php", {
           method: "PATCH",
           headers: {

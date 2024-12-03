@@ -35,7 +35,9 @@ require_once 'includes/config_session.inc.php';
 
 
         if (!in_array($_SESSION['login_user_id'], $admins_ID)) {
+            http_response_code(403);
             header('Location:404.php');
+            exit();
         }
 
         $stmt = $pdo->prepare('select * from requests join specialties join patient where speciality = Speciality_id and patient_id=id;');
@@ -61,7 +63,7 @@ require_once 'includes/config_session.inc.php';
                 $stmt->bindParam(":id", $request['patient_id']);
                 $stmt->execute();
                 $pdfs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                ?>
+    ?>
                 <div class="container">
                     <header>
                         <h1>CV PDF</h1>
@@ -106,27 +108,26 @@ require_once 'includes/config_session.inc.php';
                     echo "</div>"; ?>
 
 
-                    <?php
+        <?php
 
-                    // Only show buttons if status is pending
-                    if (strtolower($request['status']) == 'pending') {
-                        echo "<div class='button-group'>";
-                        echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
-                        echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
-                        echo "<input type='hidden' name='action' value='accept'>";
-                        echo "<button type='submit' class='accept-btn'>Accept</button>";
-                        echo "</form>";
+                // Only show buttons if status is pending
+                if (strtolower($request['status']) == 'pending') {
+                    echo "<div class='button-group'>";
+                    echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
+                    echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
+                    echo "<input type='hidden' name='action' value='accept'>";
+                    echo "<button type='submit' class='accept-btn'>Accept</button>";
+                    echo "</form>";
 
-                        echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
-                        echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
-                        echo "<input type='hidden' name='action' value='reject'>";
-                        echo "<button type='submit' class='reject-btn'>Reject</button>";
-                        echo "</form>";
-                        echo "</div>";
-
-                    }
-
+                    echo "<form method='POST' action='includes/requestapprove.php' style='display: inline;'>";
+                    echo "<input type='hidden' name='requestid' value='" . $request['requestid'] . "'>";
+                    echo "<input type='hidden' name='action' value='reject'>";
+                    echo "<button type='submit' class='reject-btn'>Reject</button>";
+                    echo "</form>";
                     echo "</div>";
+                }
+
+                echo "</div>";
             }
         }
     } catch (PDOException $e) {
@@ -134,7 +135,7 @@ require_once 'includes/config_session.inc.php';
     }
 
 
-    ?>
+        ?>
 
 </body>
 

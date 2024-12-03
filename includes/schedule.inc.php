@@ -2,8 +2,12 @@
 require_once 'dbh.inc.php';
 require_once 'config_session.inc.php';
 header('Content-Type: application/json');
+require_once 'schedule_model.inc.php';
 
 
+$db = Database::getInstance();
+$pdo = $db->getConnection();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Error handling function
 function handleErrors($errors)
@@ -142,10 +146,11 @@ function scheduleAppointment($pdo, $data)
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
+
+
         $db = Database::getInstance();
         $pdo = $db->getConnection();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $appointmentData = [
             'appointment_date' => htmlspecialchars(trim($_POST['appointment_date'] ?? '')),
             'start_time' => htmlspecialchars(trim($_POST['start_time'] ?? '')),
@@ -256,9 +261,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             default:
                 throw new Exception('Invalid action');
         }
-
         if ($stmt->rowCount() > 0) {
             $pdo->commit();
+            http_response_code(200);
             echo json_encode([
                 'success' => true,
                 'message' => 'Appointment status updated successfully'

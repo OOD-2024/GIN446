@@ -31,16 +31,28 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.appointment-card.cancelled {
+  border-color: #808080;
+}
+
 .appointment-card.completed {
+  border-color: #ff9999;
+}
+
+.appointment-card.scheduled {
+  border-color: #3a4b5c;
+}
+
+.appointment-card.available {
   border-color: #4caf50;
 }
 
-.appointment-card.in-progress {
-  border-color: #ff9800;
+.appointment-card.pending {
+  border-color: #ffa500;
 }
 
-.appointment-card.pending {
-  border-color: #e53935;
+.appointment-card.rejected {
+  border-color: #ff0000;
 }
 
 .appointment-status {
@@ -54,20 +66,28 @@
   padding: 0.5rem 1rem;
   border-radius: 4px;
 }
-
-.appointment-card.completed .status-label {
-  background-color: #4caf50;
-  color: #fff;
+.appointment-card.cancelled .status-label {
+  background-color: #808080;
 }
 
-.appointment-card.in-progress .status-label {
-  background-color: #ff9800;
-  color: #fff;
+.appointment-card.completed .status-label {
+  background-color: #ff9999;
+}
+
+.appointment-card.scheduled .status-label {
+  background-color: #3a4b5c;
+}
+
+.appointment-card.available .status-label {
+  background-color: #4caf50;
 }
 
 .appointment-card.pending .status-label {
-  background-color: #e53935;
-  color: #fff;
+  background-color: #ffa500;
+}
+
+.appointment-card.rejected .status-label {
+  background-color: #ff0000;
 }
 
 .pagination {

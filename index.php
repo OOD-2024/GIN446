@@ -17,6 +17,7 @@ if (isset($_SESSION['applied'])) {
     unset($_SESSION['applied']);
 }
 require_once 'includes/user_model.inc.php';
+print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +49,7 @@ require_once 'includes/user_model.inc.php';
                     <button id="accept-btn">I Understand </button>
                     <button id="decline-btn">Leave Website</button>
 
+                    <?php $_SESSION['first_time'] = true; ?>
 
                     <script>
                         window.onload = function() {
@@ -90,10 +92,10 @@ require_once 'includes/user_model.inc.php';
                         </div>
                         <ul class="dropdown">
                             <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
-                            <?php 
-                                if(!isset($_Session['Doctor_ID'])){
-                                   echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
-                                }
+                            <?php
+                            if (!isset($_Session['Doctor_ID'])) {
+                                echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
+                            }
                             ?>
                             <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
                         </ul>
