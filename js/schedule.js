@@ -577,11 +577,53 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+function attachAppointmentCardListeners() {
+  const appointmentCards = document.querySelectorAll(".appointment-card");
+  console.log(appointmentCards);
+
+  appointmentCards.forEach((card) => {
+    // Find the appointment details from the card
+    const nameElement = card.querySelector("h3");
+    const dateElement = card.querySelectorAll("p")[0];
+    const timeElement = card.querySelectorAll("p")[1];
+    const doctorElement = card.querySelectorAll("p")[2];
+    const locationElement = card.querySelectorAll("p")[3];
+    const noteElement = card.querySelectorAll("p")[4];
+    const statusElement = card.querySelector(".status-label");
+
+    // Create an event object structure similar to calendar events
+    const event = {
+      name: nameElement ? nameElement.textContent : "",
+      appointment_date: dateElement
+        ? dateElement.textContent.replace("Date: ", "")
+        : "",
+      startTime: timeElement
+        ? timeElement.textContent.split("-")[0].replace("Time: ", "").trim()
+        : "",
+      endTime: timeElement ? timeElement.textContent.split("-")[1].trim() : "",
+      doctor: doctorElement
+        ? doctorElement.textContent.replace("Doctor: ", "")
+        : "",
+      location: locationElement
+        ? locationElement.textContent.replace("Location: ", "")
+        : "",
+      note: noteElement ? noteElement.textContent.replace("Note: ", "") : "",
+      status: statusElement ? statusElement.textContent : "",
+      appointmentId: null, // You might want to add a way to get this, perhaps as a data attribute
+    };
+
+    card.addEventListener("click", () => {
+      showEventDetails(event);
+    });
+  });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   if (typeof events !== "undefined") {
     events.forEach(addEvent);
   }
+  // attachAppointmentCardListeners();
+
   const alerts = document.querySelectorAll(".alert");
   alerts.forEach((alert) => {
     setTimeout(() => {

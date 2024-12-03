@@ -45,7 +45,6 @@ $events = getAllAppointmentEvents($pdo, $userId);
 $eventsJson = json_encode($events);
 $records = getrecords($pdo, $userId);
 $recordsJson = json_encode($records);
-print_r($_SESSION)
 ?>
 
 
@@ -64,7 +63,15 @@ print_r($_SESSION)
 
     <title><?php echo htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name']); ?> - Profile</title>
     <style>
-        #book-event {
+        <?php
+        if (!isset($_SESSION['Doctor_ID'])) {
+
+            echo '.accept-button,
+        .reject-button {
+            display: none;
+        }     ';
+        }
+        ?>#book-event {
             display: none;
         }
 
@@ -240,7 +247,7 @@ print_r($_SESSION)
                 </select>
             </div> -->
             <div class="appointment-list">
-                <div class="appointment-cards">
+                <div class="appointment-cards ">
                     <?php
                     usort($events, function ($a, $b) {
                         $dateA = strtotime($a['appointment_date']);
@@ -402,7 +409,6 @@ print_r($_SESSION)
     </script>
     <script>
         const eventsJson = <?php echo $eventsJson; ?>;
-        console.log(eventsJson)
     </script>
     <script type="module" src="./js/schedule.js"> </script>
 </body>

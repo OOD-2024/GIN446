@@ -32,7 +32,6 @@ try {
     error_log("Error in appointment.php: " . $e->getMessage());
     $error = "An error occurred while loading the appointments. Please try again later.";
 }
-print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">

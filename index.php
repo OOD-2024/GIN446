@@ -17,7 +17,6 @@ if (isset($_SESSION['applied'])) {
     unset($_SESSION['applied']);
 }
 require_once 'includes/user_model.inc.php';
-print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>
