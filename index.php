@@ -30,7 +30,12 @@ require_once 'includes/user_model.inc.php';
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/layout.css">
+    <style>
+        .error-message {
+            top: 0;
 
+        }
+    </style>
 </head>
 
 <body>
@@ -50,15 +55,15 @@ require_once 'includes/user_model.inc.php';
 
 
                     <script>
-                        window.onload = function() {
+                        window.onload = function () {
                             document.getElementById('disclaimer-popup').style.display = 'block';
 
-                            document.getElementById('accept-btn').onclick = function() {
+                            document.getElementById('accept-btn').onclick = function () {
                                 document.getElementById('disclaimer-popup').style.display = 'none';
-                                localStorage.setItem('disclaimeraccepted', 'true');
+                                <?php $_SESSION['first_time'] = true; ?>
                             };
 
-                            document.getElementById('decline-btn').onclick = function() {
+                            document.getElementById('decline-btn').onclick = function () {
                                 alert('You need to accept the disclaimer to proceed.');
                                 window.location.href = 'https://www.google.com';
                             };
@@ -67,53 +72,53 @@ require_once 'includes/user_model.inc.php';
                 </div>
             </div>
         <?php endif; ?>
+    </div>
+    <nav>
+        <div class="logo">Cinlic</div>
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="search.php">Services</a>
+            <a href="about.php">About</a>
         </div>
-        <nav>
-            <div class="logo">Cinlic</div>
-            <div class="nav-links">
-                <a href="#" class="active">Home</a>
-                <a href="search.php">Services</a>
-                <a href="about.php">About</a>
-            </div>
 
-            <?php if (!isset($_SESSION['login_user_id'])) : ?>
-                <a href="signin_up.php"><button class="register-btn">Register</button></a>
-            <?php else : ?>
-                <ul id="drop" class="navdrop">
-                    <li>
-                        <div class="profile-avatar">
-                            <?php
-                            $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
-                            echo strtoupper(substr($user['First_Name'], 0, 1));
-                            echo strtoupper(substr($user['Last_Name'], 0, 1));
-                            ?>
-                        </div>
-                        <ul class="dropdown">
-                            <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
-                            <?php 
-                                if(!isset($_Session['Doctor_ID'])){
-                                   echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
-                                }
-                            ?>
-                            <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
-                        </ul>
-                    </li>
-                </ul>
-            <?php endif; ?>
-        </nav>
+        <?php if (!isset($_SESSION['login_user_id'])): ?>
+            <a href="signin_up.php"><button class="register-btn">Register</button></a>
+        <?php else: ?>
+            <ul id="drop" class="navdrop">
+                <li>
+                    <div class="profile-avatar">
+                        <?php
+                        $user = getPatient_from_id($pdo, $_SESSION['login_user_id']);
+                        echo strtoupper(substr($user['First_Name'], 0, 1));
+                        echo strtoupper(substr($user['Last_Name'], 0, 1));
+                        ?>
+                    </div>
+                    <ul class="dropdown">
+                        <li><a href="user.php"><button class="register-btn">Profile</button></a></li>
+                        <?php
+                        if (!isset($_Session['Doctor_ID'])) {
+                            echo '<li><a href="career.php"><button class="register-btn">Careers</button></a></li>';
+                        }
+                        ?>
+                        <li><a href="logout.php"><button class="register-btn">Logout</button></a></li>
+                    </ul>
+                </li>
+            </ul>
+        <?php endif; ?>
+    </nav>
 
-        <div class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">Need a <br> monthly <br>check up?</h1>
-                <p class="hero-subtitle">We're here to help. Talk to someone today.</p>
-            </div>
-            <div class="illustration">
-                <img src="public/DrawKit Vector Illustration Health & Medical (3).svg"></img>
-            </div>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Need a <br> monthly <br>check up?</h1>
+            <p class="hero-subtitle">We're here to help. Talk to someone today.</p>
         </div>
-        <footer>
-            &copy; 2024 clinic.io. All rights reserved.
-        </footer>
+        <div class="illustration">
+            <img src="public/DrawKit Vector Illustration Health & Medical (3).svg"></img>
+        </div>
+    </div>
+    <footer>
+        &copy; 2024 clinic.io. All rights reserved.
+    </footer>
 
 
 </body>
