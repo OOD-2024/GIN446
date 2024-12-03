@@ -31,7 +31,12 @@ print_r($_SESSION);
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/layout.css">
+    <style>
+        .error-message {
+            top: 0;
 
+        }
+    </style>
 </head>
 
 <body>
@@ -57,7 +62,7 @@ print_r($_SESSION);
 
                             document.getElementById('accept-btn').onclick = function() {
                                 document.getElementById('disclaimer-popup').style.display = 'none';
-                                localStorage.setItem('disclaimeraccepted', 'true');
+                                <?php $_SESSION['first_time'] = true; ?>
                             };
 
                             document.getElementById('decline-btn').onclick = function() {
