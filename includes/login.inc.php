@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Top of the file
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -52,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             die();
         }
 
-        regenerate_session_id_loggedin($pdo, $Email);
         $user_session_id = session_id();
         $_SESSION['user_session_id'] = $user_session_id;
         setsessionid($pdo, $Email, $user_session_id);
@@ -83,3 +83,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: ../index.php");
     die();
 }
+ob_end_flush(); // End of the file

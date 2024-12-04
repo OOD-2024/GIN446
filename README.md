@@ -1,32 +1,71 @@
 # Clinic Management System
 
-![Clinic Hero Image](image.png)
+![Clinic Hero Image](public/image.png)
 
 ## Description
 
-Cilnic is revolutionizing healthcare accessibility by providing a seamless platform where anyone,
+Cinlic is revolutionizing healthcare accessibility by providing a seamless platform where anyone,
 regardless of their age or location, can connect with healthcare professionals. Our platform enables
 users to search for doctors, book appointments, and complete payments online, all in one place.
 We believe that quality healthcare should be easily accessible to everyone, and our platform is
 designed to bridge the gap between patients and healthcare providers through technology.
 
+
+
 ## Setup Instructions
 
-1. Ensure MySQL is running on port 3306 with no password
-   - To modify MySQL connection settings, edit `includes/dbh.inc.php`
-2. Create a database named 'clinic'
-   ```sql
-   CREATE DATABASE clinic;
-   USE clinic;
+There are **two ways** to set up the Clinic Management System: using **WAMP/XAMPP** or **Docker**.
+
+### 1. Setup Using WAMP/XAMPP
+
+#### Requirements:
+- WAMP or XAMPP server installed on your local machine.
+- MySQL running on port 3306 (default) with **user: clinic_user** and  **password: pass** set.
+- An IDE (VSCode, NetBeans, PHPStorm, etc.).
+
+#### Steps:
+1. Clone the repository into your WAMP or XAMPP `www` directory:
+   ```bash
+   git clone https://github.com/OOD-2024/GIN446.git
    ```
-3. Import the database schema by executing the `db.sql` file in MySQL server
+2. Start the WAMP/XAMPP server to run Apache and MySQL.
 
-## Installation Requirements
+3. Import the database schema by running the `db.sql` file:
+   - If using phpMyAdmin:  
+     1. Navigate to the **Import** tab.  
+     2. Select the `db.sql` file from the cloned repository.  
+     3. Click **Go** to execute.
+   - If using the MySQL CLI:
+     ```bash
+     mysql -u root clinic < /path/to/db.sql
+     ```
 
-1. WAMP or XAMPP server
-2. An IDE (VSCode, Netbeans, PHPStorm, etc.)
+5. Modify the database connection settings if needed by editing `includes/dbh.inc.php`.
 
-3. Docker Setup
+### 2. Setup Using Docker
+
+#### Requirements:
+- Docker and Docker Compose installed.
+
+#### Steps:
+1. **Option 1: Pull the Prebuilt Docker Image**
+   ```bash
+   docker pull anthony/cinlic
+   docker run -d -p 80:80 -p 3306:3306 anthony/clinic
+   ```
+
+2. **Option 2: Clone the Repository and Use Docker Compose**
+   1. Clone the repository:
+      ```bash
+      git clone https://github.com/OOD-2024/GIN446.git
+      cd your-repo-folder
+      ```
+   2. Run Docker Compose to build and start the containers:
+      ```bash
+      docker-compose up -d  # or docker compose up -d
+      ```
+
+3. Access the application by navigating to `http://localhost` in your browser.
 
 ## How to Use
 
@@ -62,14 +101,6 @@ designed to bridge the gap between patients and healthcare providers through tec
 ## Future Features
 
 Check our GitHub issues page for upcoming features and enhancements. Stay tuned!
-
-## Database Configuration
-
-The default MySQL connection settings are:
-
-- Port: 3306
-- Password: none
-- Configuration file location: `includes/dbh.inc.php`
 
 ## Contributing
 

@@ -45,5 +45,4 @@ function setsessionid($pdo, $email, $sessionId)
     $stmt->bindParam(":email", $email);
     $stmt->execute();
 
-    $stmt->bindParam(':date', date('Y-m-d H:i:s'));
 }

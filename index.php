@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 require_once 'includes/config_session.inc.php';
 
