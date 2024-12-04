@@ -117,7 +117,7 @@ try {
 
                     foreach ($events as $appointment) {
                         $status = $appointment['status'];
-                        $statusClass = $status;
+                        $statusClass = strtolower($status);
                         // $statusClass = '';
                         // if ($status == 'Completed') {
                         //     $statusClass = 'completed';

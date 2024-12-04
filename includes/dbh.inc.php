@@ -9,7 +9,7 @@ class Database
     private function __construct()
     {
         $host = 'localhost';
-        $port = 3308;
+        $port = 3306;
         $dbname = 'clinic';
         $dbusername = 'root';
         $dbpassword = '';

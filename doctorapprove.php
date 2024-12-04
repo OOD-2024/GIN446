@@ -9,7 +9,7 @@ if (!isset($_SESSION['login_user_id'])) {
 }
 
 // Authorized admin IDs (consider moving to a configuration file)
-$admins_ID = [117, 137, 69];
+$admins_ID = [117, 137, 6];
 
 // Check if current user is an admin
 if (!in_array($_SESSION['login_user_id'], $admins_ID)) {
@@ -48,16 +48,7 @@ if (!in_array($_SESSION['login_user_id'], $admins_ID)) {
 
             // Improved SQL query with proper JOIN syntax and added table aliases
             $stmt = $pdo->prepare('
-                SELECT r.*, 
-                       p.fullname, 
-                       p.Email, 
-                       p.phoneNum, 
-                       s.speciality_Name, 
-                       r.experience, 
-                       r.status
-                FROM requests r
-                JOIN patient p ON r.patient_id = p.id
-                JOIN specialties s ON r.speciality = s.Speciality_id
+         SELECT * from requests join patient join specialties WHERE patient_id = ID and speciality = speciality_id;
             ');
             $stmt->execute();
             $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);

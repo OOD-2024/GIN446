@@ -13,6 +13,11 @@ try {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $patientid = $result['patient_id'];
 
+        $stmt = $pdo->prepare("select * from specialties where Speciality_id =:id");
+        $stmt->bindParam(':id', $result['speciality']);
+        $stmt->execute();
+        $sname = $stmt->fetch(PDO::FETCH_ASSOC);
+
         // Validate the action
         if ($action != 'accept' && $action != 'reject') {
             throw new Exception('Invalid action');
@@ -28,6 +33,13 @@ try {
 
             $stmt = $pdo->prepare("insert into doctor(ID) values (:id)");
             $stmt->bindParam(':id', $patientid);
+            $stmt->execute();
+
+            $stmt = $pdo->prepare("insert into specialty(DoctorID , Specialty_ID , Specialty_Name) values (:id , :sid , :sname)");
+            $stmt->bindParam(':id', $patientid);
+            $stmt->bindParam(':sid', $result['speciality']);
+            $stmt->bindParam(':sname', $sname['speciality_Name']);            
+
             $stmt->execute();
 
         } else {

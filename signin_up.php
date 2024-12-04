@@ -80,8 +80,8 @@ if (isset($_SESSION['login_user_id'])) {
                 <div class="select-box">
                     <div class="selected-option">
                         <div>
-                            <span class="iconify" data-icon="flag:gb-4x3"></span>
-                            <strong>+44</strong>
+                            <span class="iconify" data-icon="flag:lb-4x3"></span>
+                            <strong>+961</strong>
                         </div>
                         <input type="tel" name="phone" placeholder="Phone Number">
                     </div>
@@ -726,11 +726,7 @@ if (isset($_SESSION['login_user_id'])) {
                     code: "IM",
                     phone: 44
                 },
-                {
-                    name: "Israel",
-                    code: "IL",
-                    phone: 972
-                },
+                
                 {
                     name: "Italy",
                     code: "IT",
