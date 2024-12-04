@@ -8,12 +8,11 @@ class Database
 
     private function __construct()
     {
-        $host = 'localhost';
-        $port = 3306;
-        $dbname = 'clinic';
-        $dbusername = 'root';
-        $dbpassword = '';
-
+      $port = 3306;
+      $host = $_ENV['DB_HOST'] ?? 'db';
+      $dbusername = $_ENV['DB_USER'] ?? 'user';
+      $dbpassword = $_ENV['DB_PASS'] ?? 'pass';
+      $dbname = $_ENV['DB_NAME'] ?? 'clinic';     
         try {
             $this->pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $dbusername, $dbpassword);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
