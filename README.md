@@ -51,7 +51,7 @@ There are **two ways** to set up the Clinic Management System: using **WAMP/XAMP
 1. **Option 1: Pull the Prebuilt Docker Image**
    ```bash
    docker pull anthony/cinlic
-   docker run -d -p 80:80 -p 3306:3306 anthony/clinic
+   docker run -d -p 80:80 -p 3306:3306 anthony117/clinic
    ```
 
 2. **Option 2: Clone the Repository and Use Docker Compose**
