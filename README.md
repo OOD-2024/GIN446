@@ -43,6 +43,7 @@ There are **two ways** to set up the Clinic Management System: using **WAMP/XAMP
 5. Modify the database connection settings if needed by editing `includes/dbh.inc.php`.
 
 ### 2. Setup Using Docker
+using Docker there is no more need to donwload WAMP or MYSQL database on local machine. these functionalities are provided through MYSQL, PHP, AND PHPADMIN CONTAINERS 
 
 #### Requirements:
 - Docker and Docker Compose installed.
@@ -58,8 +59,7 @@ There are **two ways** to set up the Clinic Management System: using **WAMP/XAMP
       docker-compose up -d  # or docker compose up -d
       ```
 
-3. Access the application by navigating to `http://localhost` in your browser.
-
+3. Access the application by navigating to `http://localhost` in your browser. port 8081 for phpadmin and port 8080 for web page. Also note port 3306 should be availabe for MYSQL container
 ## How to Use
 
 ### For Patients
