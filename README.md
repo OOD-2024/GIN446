@@ -81,6 +81,7 @@ There are **two ways** to set up the Clinic Management System: using **WAMP/XAMP
    - Book appointments
    - Access your profile page
    - Apply to become a doctor
+5. If you want to access the admin page doctorapprove.php your ID should be 117 , 137 or 7 if you want to change these ids head to the doctorapprove.php and change the values inside 'admins' array
 
 ### For Doctors
 
