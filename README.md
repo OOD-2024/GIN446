@@ -48,19 +48,12 @@ There are **two ways** to set up the Clinic Management System: using **WAMP/XAMP
 - Docker and Docker Compose installed.
 
 #### Steps:
-1. **Option 1: Pull the Prebuilt Docker Image**
-   ```bash
-   docker pull anthony/cinlic
-   docker run -d -p 80:80 -p 3306:3306 anthony117/clinic
-   ```
-
-2. **Option 2: Clone the Repository and Use Docker Compose**
-   1. Clone the repository:
+1. Clone the repository:
       ```bash
       git clone https://github.com/OOD-2024/GIN446.git
       cd your-repo-folder
       ```
-   2. Run Docker Compose to build and start the containers:
+2. Run Docker Compose to build and start the containers:
       ```bash
       docker-compose up -d  # or docker compose up -d
       ```
